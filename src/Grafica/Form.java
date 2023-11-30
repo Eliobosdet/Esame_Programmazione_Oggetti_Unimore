@@ -2,8 +2,10 @@ package Grafica;
 
 import Esami.Esame;
 import Esami.EsameComposto;
+import Esami.EsameSemplice;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -32,12 +34,25 @@ public class Form {
     private JTextField txtPercParz2;
     private JTextField txtPercParz3;
     private JTextField txtPercParz4;
+    private JButton btnModificaTabella;
+    private JButton btnEliminaEsame;
 
 
     //COMPONENTI LOGICI
-    ArrayList<Esame> jtblData = new ArrayList<Esame>(); //Esami sostenuti
+    ArrayList<Esame> esami = new ArrayList<Esame>(); //Esami memorizzati
+    ArrayList<Object[]> dataJtbl = new ArrayList<Object[]>(); //Esami stampati
     private int N_PARZ = 2;
     public Form() {
+
+        DefaultTableModel tblmdl = new DefaultTableModel();
+        jtbl.setModel(tblmdl);
+        String[] columns = {"NomeStudente","CognomeStudente","Insegnamento","VotoFinale","NumeroCrediti","Lode","TipoEsame"};  //COLONNE DELLA TABLE
+        for (String s: columns) { tblmdl.addColumn(s); }
+
+        jtbl.setRowSelectionAllowed(true);  //Permette la selezione delle righe
+
+
+
         btnAggiungiEsame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -55,7 +70,14 @@ public class Form {
                         System.out.println("Percentuali non corrette");
 
                 } else {
-
+                    System.out.println("Esame semplice");
+                    EsameSemplice es = new EsameSemplice();
+                    esami.add(es);
+                    es.getDataJtbl().toString();
+                    Object[] obj = {"cere"};
+                    dataJtbl.add(es.getDataJtbl());
+                    tblmdl.addRow(dataJtbl.get(dataJtbl.size()-1));
+                    System.out.println("a");
                 }
             }
         });
