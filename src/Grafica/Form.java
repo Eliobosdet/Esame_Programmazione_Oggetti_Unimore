@@ -3,6 +3,7 @@ package Grafica;
 import Esami.Esame;
 import Esami.EsameComposto;
 import Esami.EsameSemplice;
+import Esami.ProvaParziale;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -39,12 +40,12 @@ public class Form {
 
 
     //COMPONENTI LOGICI
+    DefaultTableModel tblmdl = new DefaultTableModel();
     ArrayList<Esame> esami = new ArrayList<Esame>(); //Esami memorizzati
-    ArrayList<Object[]> dataJtbl = new ArrayList<Object[]>(); //Esami stampati
+    //ArrayList<Object[]> dataJtbl = new ArrayList<Object[]>(); //Esami stampati
     private int N_PARZ = 2;
     public Form() {
 
-        DefaultTableModel tblmdl = new DefaultTableModel();
         jtbl.setModel(tblmdl);
         String[] columns = {"NomeStudente","CognomeStudente","Insegnamento","VotoFinale","NumeroCrediti","Lode","TipoEsame"};  //COLONNE DELLA TABLE
         for (String s: columns) { tblmdl.addColumn(s); }
@@ -58,26 +59,31 @@ public class Form {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Aggiungo Esame");
 
-                int[] perc = {0,0,0,0}; //Percentuali che andrò a leggere
                 if(cmboxTipoEsame.getSelectedIndex()==1) {  //Esame Composto
+                    System.out.println("Esame composto");
+                    int[] perc = {0,0,0,0}; //Percentuali che andrò a leggere
+                    int[] voti = {0,0,0,0}; //Voti che andrò a leggere
                     if(ctrlPerc(perc)) {
-                        System.out.println("Percentuali corrette");
-                        System.out.print("Percentuali: "); for (int i: perc) {System.out.print(i);}
-                        //AGGIUNGO ESAME COMPOSTO E CORRISPETTIVI ESAMI PARZIALI
-                        //jtblData.add(new EsameComposto())
+                        //System.out.println("Percentuali corrette");
+                        System.out.print("Percentuali: "); for (int i: perc) {System.out.print(i+" ");}
+                        //LEGGO I VOTI DI OGNI PARZIALE
+                        voti[0] = Integer.parseInt(String.valueOf(cmbxVotoParz1.getSelectedIndex()));
+                        voti[1] = Integer.parseInt(String.valueOf(cmbxVotoParz2.getSelectedIndex()));
+                        voti[2] = Integer.parseInt(String.valueOf(cmbxVotoParz3.getSelectedIndex()));
+                        voti[3] = Integer.parseInt(String.valueOf(cmbxVotoParz4.getSelectedIndex()));
+                        //AGGIUNGO ESAMI PARZIALI ALL'ESAME COMPOSTO
+
+                        ArrayList<ProvaParziale> arrListParz = new ArrayList<ProvaParziale>();
+                        EsameComposto ec = new EsameComposto();
+                        addEsameComposto(ec,voti,perc);
                     }
                     else
                         System.out.println("Percentuali non corrette");
 
-                } else {
+                } else {    //Esame Semplice
                     System.out.println("Esame semplice");
                     EsameSemplice es = new EsameSemplice();
-                    esami.add(es);
-                    es.getDataJtbl().toString();
-                    Object[] obj = {"cere"};
-                    dataJtbl.add(es.getDataJtbl());
-                    tblmdl.addRow(dataJtbl.get(dataJtbl.size()-1));
-                    System.out.println("a");
+                    //addEsameSemplice(es);
                 }
             }
         });
@@ -150,6 +156,24 @@ public class Form {
                 System.out.println("N_PARZ: "+N_PARZ);
             }
         });
+    }
+
+    private void addEsameComposto(EsameComposto ec, int[] voti, int[] perc) {
+        ArrayList<ProvaParziale> arrListParz = new ArrayList<ProvaParziale>();
+        for(int i = 0; i < N_PARZ; i++) {
+            arrListParz.add(new ProvaParziale(voti[i],perc[i]));
+        }
+        ec.setArrList_parziali(arrListParz);
+        //jtblData.add(new EsameComposto())
+        tblmdl.addRow(ec.getDataJtbl());
+    }
+
+    private void addEsameSemplice(EsameSemplice es) {
+        esami.add(es);
+        //es.getDataJtbl().toString();
+        //dataJtbl.add(es.getDataJtbl());
+        //tblmdl.addRow(dataJtbl.get(dataJtbl.size()-1));
+        tblmdl.addRow(es.getDataJtbl());
     }
 
     private void setPartialsNotVisible() {

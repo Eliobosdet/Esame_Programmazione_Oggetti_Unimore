@@ -1,18 +1,26 @@
 package Esami;
 
-public class ProvaParziale extends AbstractEsame {
-    protected float pesoPercentuale;
+public class ProvaParziale {
+    protected int pesoPercentuale;
+    private int votoFinale;
 
-    public ProvaParziale(String nomeStudente, String cognomeStudente, String insegnamento, int votoFinale, float pesoPercentuale) {
-        super(nomeStudente,cognomeStudente,insegnamento,votoFinale);
+    public ProvaParziale(int votoFinale, int pesoPercentuale) {
+        this.votoFinale = votoFinale;
         this.pesoPercentuale = pesoPercentuale;
     }
 
-    public void setPesoPercentuale(float pesoPercentuale) {
+    public int getVotoFinale() {
+        return votoFinale;
+    }
+
+    public void setVotoFinale(int votoFinale) {
+        this.votoFinale = votoFinale;
+    }
+    public void setPesoPercentuale(int pesoPercentuale) {
         this.pesoPercentuale = pesoPercentuale;
     }
 
-    public float getPesoPercentuale() {
+    public int getPesoPercentuale() {
         return pesoPercentuale;
     }
 }

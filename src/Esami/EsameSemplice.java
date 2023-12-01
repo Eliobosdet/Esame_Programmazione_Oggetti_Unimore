@@ -3,21 +3,20 @@ package Esami;
 public class EsameSemplice extends AbstractEsame {
     protected boolean lode;
     protected int crediti;
-    public EsameSemplice(String nomeStudente, String cognomeStudente, String insegnamento,int votoFinale,boolean lode,int crediti) {
-        super(nomeStudente,cognomeStudente,insegnamento,votoFinale);
+    public EsameSemplice(String nomeStudente, String cognomeStudente, String insegnamento,int votoFinale,int crediti, boolean lode) {
+        super(nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti,"Esame Semplice");
         this.lode=lode;
-        this.crediti=crediti;
     }
 
     public EsameSemplice(){
-        super();
+        super("Semplice");
         this.lode=false;
         this.crediti=0;
     }
 
     @Override
     public Object[] getDataJtbl() {
-        Object[] obj = {nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti};
+        Object[] obj = {nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti,lode,tipoEsame};
         return obj;
     }
 

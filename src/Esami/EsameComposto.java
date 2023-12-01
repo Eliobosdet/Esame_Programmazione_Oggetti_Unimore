@@ -4,22 +4,21 @@ import java.util.ArrayList;
 
 public class EsameComposto extends AbstractEsame {
     protected int n_parziali;
-    protected int crediti;
     protected ArrayList<ProvaParziale> arrList_parziali;
-    public EsameComposto(String nomeStudente, String cognomeStudente, String insegnamento, int votoFinale, int n_parziali, int crediti) {
-        super(nomeStudente,cognomeStudente,insegnamento,votoFinale);
+    public EsameComposto(String nomeStudente, String cognomeStudente, String insegnamento, int votoFinale, int crediti, int n_parziali) {
+        super(nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti,"Esame Composto");
         this.n_parziali = n_parziali;
-        this.crediti=crediti;
     }
 
     public EsameComposto() {
-        super();
+        super("Composto");
         this.n_parziali=0;
-        this.crediti=0;
     }
 
-    public EsameComposto(ArrayList<ProvaParziale> arrList_parziali) {
-
+    @Override
+    public Object[] getDataJtbl() {
+        Object[] obj = {nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti,"false",tipoEsame};
+        return obj;
     }
 
     public int getN_parziali() {
@@ -45,4 +44,5 @@ public class EsameComposto extends AbstractEsame {
     public void setArrList_parziali(ArrayList<ProvaParziale> arrList_parziali) {
         this.arrList_parziali = arrList_parziali;
     }
+
 }
