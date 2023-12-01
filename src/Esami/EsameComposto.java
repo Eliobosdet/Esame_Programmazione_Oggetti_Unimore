@@ -18,6 +18,10 @@ public class EsameComposto extends AbstractEsame {
         this.crediti=0;
     }
 
+    public EsameComposto(ArrayList<ProvaParziale> arrList_parziali) {
+
+    }
+
     public int getN_parziali() {
         return n_parziali;
     }

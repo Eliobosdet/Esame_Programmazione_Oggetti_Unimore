@@ -1,6 +1,7 @@
 package Esami;
 
 public interface Esame {
+    public Object[] getDataJtbl();
     public String getNomeStudente();
     public String getCognomeStudente();
     public String getInsegnamento();

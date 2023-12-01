@@ -16,11 +16,17 @@ public abstract class AbstractEsame
     }
 
     public AbstractEsame(){
-        this.nomeStudente = "nome";
-        this.cognomeStudente = "cognome";
-        this.insegnamento = "insegnamento";
+        this.nomeStudente = null;
+        this.cognomeStudente = null;
+        this.insegnamento = null;
         this.votoFinale = 0;
     };
+
+    @Override
+    public Object[] getDataJtbl() {
+        Object[] obj = {nomeStudente,cognomeStudente,insegnamento,votoFinale};
+        return obj;
+    }
 
     @Override
     public String getNomeStudente() {

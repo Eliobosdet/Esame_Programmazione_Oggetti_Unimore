@@ -15,6 +15,12 @@ public class EsameSemplice extends AbstractEsame {
         this.crediti=0;
     }
 
+    @Override
+    public Object[] getDataJtbl() {
+        Object[] obj = {nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti};
+        return obj;
+    }
+
     public boolean isLode() {
         return lode;
     }
