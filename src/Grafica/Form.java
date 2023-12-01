@@ -84,6 +84,22 @@ public class Form {
                     System.out.println("Esame semplice");
                     EsameSemplice es = new EsameSemplice();
                     //addEsameSemplice(es);
+                    InserisciSempliceGUI frameSemplice = new InserisciSempliceGUI();
+                    frameSemplice.getBtnInserisci().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            System.out.println("Inserimento avvenuto");
+                            if(!frameSemplice.ctrlNumCrediti() || !frameSemplice.ctrlTextFields()){
+                                frameSemplice.getLblError().setVisible(true);
+                            }
+                            else {
+                                frameSemplice.getLblError().setVisible(false);
+                                System.out.println(frameSemplice.toString());
+                                Object[] obj = frameSemplice.getDataJtbl();
+                                frameSemplice.getJf().dispose();
+                            }
+                        }
+                    });
                 }
             }
         });
