@@ -2,6 +2,8 @@ package Grafica;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 public class InserisciSempliceGUI extends JFrame {
@@ -38,6 +40,7 @@ public class InserisciSempliceGUI extends JFrame {
             for (int i = 0; i < 31; i++) { v.add(i); }
             cmbxVotoFinale = new JComboBox(v);
 
+            rdbtnLode.setEnabled(false);
             lblError.setForeground(Color.red);
             lblError.setVisible(false);
 
@@ -49,16 +52,27 @@ public class InserisciSempliceGUI extends JFrame {
             jp.add(lblLode);jp.add(rdbtnLode);
             jp.add(btnInserisci);jp.add(lblError);
 
-
+            cmbxVotoFinale.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    System.out.println("cmbox cambiata");
+                    if(String.valueOf(cmbxVotoFinale.getSelectedIndex()).equals("30"))
+                        rdbtnLode.setEnabled(true);
+                    else {
+                        rdbtnLode.setSelected(false);
+                        rdbtnLode.setEnabled(false);
+                    }
+                }
+            });
 
             jf.add(jp);
             jf.setVisible(true);
         }
 
         public Object[] getDataJtbl() {
-            Object[] obj = {txtNome.getText(),txtCognome.getText(),txtInsegnamento.getText(),
-            Integer.parseInt(String.valueOf(cmbxVotoFinale.getSelectedIndex())), txtNumCrediti.getText(),
-            rdbtnLode.isSelected()};
+            Object[] obj = {txtNome.getText().toUpperCase(),txtCognome.getText().toUpperCase(),txtInsegnamento.getText().toUpperCase(),
+            Integer.parseInt(String.valueOf(cmbxVotoFinale.getSelectedIndex()).toUpperCase()), txtNumCrediti.getText().toUpperCase(),
+            rdbtnLode.isSelected(),"ESAME SEMPLICE"};
             return obj;
         }
 
@@ -82,6 +96,16 @@ public class InserisciSempliceGUI extends JFrame {
             }
             return true;
         }
+
+    @Override
+    public String toString() {
+        String s = "Esame semplice: ";
+        for (Object obj: this.getDataJtbl()) {
+            s += obj.toString() + ",";
+        }
+        s = s.substring(0,s.length()-1);
+        return s;
+    }
 
     public JFrame getJf() {
         return jf;

@@ -6,10 +6,16 @@ import Esami.EsameSemplice;
 import Esami.ProvaParziale;
 
 import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Form {
     //COMPONENTI GRAFICI
@@ -50,6 +56,43 @@ public class Form {
         String[] columns = {"NomeStudente","CognomeStudente","Insegnamento","VotoFinale","NumeroCrediti","Lode","TipoEsame"};  //COLONNE DELLA TABLE
         for (String s: columns) { tblmdl.addColumn(s); }
 
+        TableColumnModel columnModel = jtbl.getColumnModel();
+
+        CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer();
+        columnModel.getColumn(5).setCellRenderer(checkBoxRenderer);
+        columnModel.getColumn(5).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+
+        tblmdl.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    int row = e.getFirstRow();
+                    int column = e.getColumn();
+                    System.out.println("TABLE CHANGED, row:" + row + ", column:" + column);
+
+                    if (column == 3) {
+                        int obj = Integer.parseInt(String.valueOf(tblmdl.getValueAt(row, column)));
+                        Component component = checkBoxRenderer.getTableCellRendererComponent(jtbl, null, false, false, row, 5);
+                        JCheckBox jCheckBox = (JCheckBox) component;
+                        if(obj!=30) {
+                            System.out.println("Nuovo voto: " + obj);
+                            tblmdl.setValueAt(false, row, 5); // Deseleziona la casella di controllo
+                            jCheckBox.setEnabled(false);
+                        } else {
+                            jCheckBox.setEnabled(true);
+
+                        }
+
+
+                        //if (component instanceof JCheckBox) {
+                            //JCheckBox checkBox = (JCheckBox) component;
+
+
+                        }
+                    }
+                }
+        });
+
         jtbl.setRowSelectionAllowed(true);  //Permette la selezione delle righe
 
 
@@ -58,7 +101,7 @@ public class Form {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Aggiungo Esame");
-
+ 
                 if(cmboxTipoEsame.getSelectedIndex()==1) {  //Esame Composto
                     System.out.println("Esame composto");
                     int[] perc = {0,0,0,0}; //Percentuali che andrò a leggere
@@ -89,7 +132,7 @@ public class Form {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             System.out.println("Inserimento avvenuto");
-                            if(!frameSemplice.ctrlNumCrediti() || !frameSemplice.ctrlTextFields()){
+                            if(!frameSemplice.ctrlNumCrediti() || !frameSemplice.ctrlTextFields()){     //Caso di errore
                                 frameSemplice.getLblError().setVisible(true);
                             }
                             else {
@@ -97,6 +140,7 @@ public class Form {
                                 System.out.println(frameSemplice.toString());
                                 Object[] obj = frameSemplice.getDataJtbl();
                                 frameSemplice.getJf().dispose();
+                                tblmdl.addRow(obj);
                             }
                         }
                     });
