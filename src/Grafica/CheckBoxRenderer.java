@@ -13,10 +13,7 @@ public class CheckBoxRenderer extends JCheckBox implements TableCellRenderer {
     public Component getTableCellRendererComponent(
             JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         setSelected(Boolean.TRUE.equals(value));
-        Object valueInColumn3 = table.getValueAt(row, 3);
-        if (valueInColumn3 != null && !valueInColumn3.toString().equals("30")) {
-            setEnabled(false);
-        }
+        System.out.println("RENDERER: Object:"+value+",Selected:"+isSelected+",row:"+row+",column:"+column);
         return this;
     }
 }

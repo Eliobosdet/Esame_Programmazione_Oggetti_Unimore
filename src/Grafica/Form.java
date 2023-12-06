@@ -7,10 +7,7 @@ import Esami.ProvaParziale;
 
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumnModel;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -59,8 +56,10 @@ public class Form {
         TableColumnModel columnModel = jtbl.getColumnModel();
 
         CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer();
+        CheckBoxEditor defaultCellEditor = new CheckBoxEditor();
         columnModel.getColumn(5).setCellRenderer(checkBoxRenderer);
-        columnModel.getColumn(5).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+        columnModel.getColumn(5).setCellEditor(defaultCellEditor);
+        //columnModel.getColumn(5).getCellEditor().removeCellEditorListener();
 
         tblmdl.addTableModelListener(new TableModelListener() {
             @Override
@@ -71,20 +70,38 @@ public class Form {
                     System.out.println("TABLE CHANGED, row:" + row + ", column:" + column);
 
                     if (column == 3) {
-                        int obj = Integer.parseInt(String.valueOf(tblmdl.getValueAt(row, column)));
-                        Component component = checkBoxRenderer.getTableCellRendererComponent(jtbl, null, false, false, row, 5);
+                        int voto = Integer.parseInt(String.valueOf(tblmdl.getValueAt(row, column)));
+                        Object obj_lode = tblmdl.getValueAt(row, 5);
+                        boolean value_lode = (Boolean) obj_lode;
+                        TableCellEditor cellEditor = jtbl.getCellEditor(row, 5);
+                        if(cellEditor instanceof CheckBoxEditor) {
+                            System.out.println(cellEditor);
+                            CheckBoxEditor checkBoxEditor = (CheckBoxEditor) cellEditor;
+                            if(voto!=30) {
+                                tblmdl.setValueAt(false, row, 5);
+                                //jtbl.editCellAt(row,5); //da errore
+                                checkBoxEditor.setCellEditable(false);
+                         } else {
+                                checkBoxEditor.setCellEditable(true);
+                                //checkBoxEditor.setCellEditable(true);
+                            }
+                        }
+
+                            //cellEditor.removeCellEditorListener();
+
+                            //Component component = checkBoxRenderer.getTableCellRendererComponent(jtbl, obj_lode, value_lode, false, row, 5);
+                        /*if(obj!=30) {
                         JCheckBox jCheckBox = (JCheckBox) component;
-                        if(obj!=30) {
                             System.out.println("Nuovo voto: " + obj);
                             tblmdl.setValueAt(false, row, 5); // Deseleziona la casella di controllo
                             jCheckBox.setEnabled(false);
                         } else {
                             jCheckBox.setEnabled(true);
 
-                        }
+                        }*/
 
 
-                        //if (component instanceof JCheckBox) {
+                            //if (component instanceof JCheckBox) {
                             //JCheckBox checkBox = (JCheckBox) component;
 
 
