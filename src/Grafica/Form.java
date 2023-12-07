@@ -1,9 +1,6 @@
 package Grafica;
 
-import Esami.Esame;
-import Esami.EsameComposto;
-import Esami.EsameSemplice;
-import Esami.ProvaParziale;
+import Esami.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -38,13 +35,20 @@ public class Form {
     private JTextField txtPercParz2;
     private JTextField txtPercParz3;
     private JTextField txtPercParz4;
-    private JButton btnModificaTabella;
+    private JButton btnModificaEsame;
     private JButton btnEliminaEsame;
 
 
     //COMPONENTI LOGICI
-    DefaultTableModel tblmdl = new DefaultTableModel();
+    DefaultTableModel tblmdl = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            //all cells false
+            return false;
+        }
+    };
     ArrayList<Esame> esami = new ArrayList<Esame>(); //Esami memorizzati
+    ArrayList<InserisciSempliceGUI> frameSemplici = new ArrayList<InserisciSempliceGUI>();
     //ArrayList<Object[]> dataJtbl = new ArrayList<Object[]>(); //Esami stampati
     private int N_PARZ = 2;
     public Form() {
@@ -55,70 +59,16 @@ public class Form {
 
         TableColumnModel columnModel = jtbl.getColumnModel();
 
-        CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer();
-        CheckBoxEditor defaultCellEditor = new CheckBoxEditor();
-        columnModel.getColumn(5).setCellRenderer(checkBoxRenderer);
-        columnModel.getColumn(5).setCellEditor(defaultCellEditor);
+        //columnModel.getColumn(5).setCellEditor(checkBoxEditor);
         //columnModel.getColumn(5).getCellEditor().removeCellEditorListener();
 
-        tblmdl.addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                if (e.getType() == TableModelEvent.UPDATE) {
-                    int row = e.getFirstRow();
-                    int column = e.getColumn();
-                    System.out.println("TABLE CHANGED, row:" + row + ", column:" + column);
-
-                    if (column == 3) {
-                        int voto = Integer.parseInt(String.valueOf(tblmdl.getValueAt(row, column)));
-                        Object obj_lode = tblmdl.getValueAt(row, 5);
-                        boolean value_lode = (Boolean) obj_lode;
-                        TableCellEditor cellEditor = jtbl.getCellEditor(row, 5);
-                        if(cellEditor instanceof CheckBoxEditor) {
-                            System.out.println(cellEditor);
-                            CheckBoxEditor checkBoxEditor = (CheckBoxEditor) cellEditor;
-                            if(voto!=30) {
-                                tblmdl.setValueAt(false, row, 5);
-                                //jtbl.editCellAt(row,5); //da errore
-                                checkBoxEditor.setCellEditable(false);
-                         } else {
-                                checkBoxEditor.setCellEditable(true);
-                                //checkBoxEditor.setCellEditable(true);
-                            }
-                        }
-
-                            //cellEditor.removeCellEditorListener();
-
-                            //Component component = checkBoxRenderer.getTableCellRendererComponent(jtbl, obj_lode, value_lode, false, row, 5);
-                        /*if(obj!=30) {
-                        JCheckBox jCheckBox = (JCheckBox) component;
-                            System.out.println("Nuovo voto: " + obj);
-                            tblmdl.setValueAt(false, row, 5); // Deseleziona la casella di controllo
-                            jCheckBox.setEnabled(false);
-                        } else {
-                            jCheckBox.setEnabled(true);
-
-                        }*/
-
-
-                            //if (component instanceof JCheckBox) {
-                            //JCheckBox checkBox = (JCheckBox) component;
-
-
-                        }
-                    }
-                }
-        });
-
         jtbl.setRowSelectionAllowed(true);  //Permette la selezione delle righe
-
-
 
         btnAggiungiEsame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Aggiungo Esame");
- 
+
                 if(cmboxTipoEsame.getSelectedIndex()==1) {  //Esame Composto
                     System.out.println("Esame composto");
                     int[] perc = {0,0,0,0}; //Percentuali che andrò a leggere
@@ -142,22 +92,18 @@ public class Form {
 
                 } else {    //Esame Semplice
                     System.out.println("Esame semplice");
-                    EsameSemplice es = new EsameSemplice();
-                    //addEsameSemplice(es);
-                    InserisciSempliceGUI frameSemplice = new InserisciSempliceGUI();
-                    frameSemplice.getBtnInserisci().addActionListener(new ActionListener() {
+                    InserisciSempliceGUI f = new InserisciSempliceGUI();
+                    frameSemplici.add(f);
+                    f.getBtnInserisci().addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            System.out.println("Inserimento avvenuto");
-                            if(!frameSemplice.ctrlNumCrediti() || !frameSemplice.ctrlTextFields()){     //Caso di errore
-                                frameSemplice.getLblError().setVisible(true);
+                            if(!f.ctrlNumCrediti() || !f.ctrlTextFields()){     //Caso di errore
+                                f.getLblError().setVisible(true);
                             }
                             else {
-                                frameSemplice.getLblError().setVisible(false);
-                                System.out.println(frameSemplice.toString());
-                                Object[] obj = frameSemplice.getDataJtbl();
-                                frameSemplice.getJf().dispose();
-                                tblmdl.addRow(obj);
+                                System.out.println("Inserimento avvenuto | "+f.toString());
+                                f.getLblError().setVisible(false);
+                                addEsameSemplice(f);
                             }
                         }
                     });
@@ -233,6 +179,27 @@ public class Form {
                 System.out.println("N_PARZ: "+N_PARZ);
             }
         });
+        btnModificaEsame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int indice = jtbl.getSelectedRow();
+                InserisciSempliceGUI f = frameSemplici.get(indice);
+                f.reopen();
+                f.getBtnModificaSemplice().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(!f.ctrlNumCrediti() || !f.ctrlTextFields()){     //Caso di errore
+                            f.getLblError().setVisible(true);
+                        }
+                        else {
+                            System.out.println("Modifica avvenuta | "+f.toString());
+                            f.getLblError().setVisible(false);
+                            modifyEsameSemplice(f,indice);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void addEsameComposto(EsameComposto ec, int[] voti, int[] perc) {
@@ -241,16 +208,23 @@ public class Form {
             arrListParz.add(new ProvaParziale(voti[i],perc[i]));
         }
         ec.setArrList_parziali(arrListParz);
-        //jtblData.add(new EsameComposto())
         tblmdl.addRow(ec.getDataJtbl());
     }
 
-    private void addEsameSemplice(EsameSemplice es) {
+    private void addEsameSemplice(InserisciSempliceGUI frame) {
+        Object[] obj = frame.getDataJtbl();
+        EsameSemplice es = new EsameSemplice(obj);
         esami.add(es);
-        //es.getDataJtbl().toString();
-        //dataJtbl.add(es.getDataJtbl());
-        //tblmdl.addRow(dataJtbl.get(dataJtbl.size()-1));
-        tblmdl.addRow(es.getDataJtbl());
+        System.out.println(esami.toString());
+        tblmdl.addRow(obj);
+        frame.getJf().dispose();
+    }
+
+    private void modifyEsameSemplice(InserisciSempliceGUI f, int row) {
+        Object[] obj = f.getDataJtbl();
+        for (int i = 0; i < obj.length; i++)
+            tblmdl.setValueAt(obj[i],row,i);
+        f.getJf().dispose();
     }
 
     private void setPartialsNotVisible() {

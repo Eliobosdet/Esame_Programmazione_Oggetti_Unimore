@@ -29,28 +29,27 @@ public class InserisciSempliceGUI extends JFrame {
         private JComboBox cmbxVotoFinale;
         private JRadioButton rdbtnLode = new JRadioButton();
         private JButton btnInserisci = new JButton("Inserisci");
+        private JButton btnModificaSemplice = new JButton("Modifica");
 
         public InserisciSempliceGUI() {
-            jf.setSize(400,400);
-            jf.setResizable(false);
-            jf.setLocationRelativeTo(null);
-            jf.setDefaultCloseOperation(HIDE_ON_CLOSE);
+            btnModificaSemplice.setVisible(false);
+            initialize();
+        }
 
-            Vector<Integer> v = new Vector<Integer>(31);
-            for (int i = 0; i < 31; i++) { v.add(i); }
-            cmbxVotoFinale = new JComboBox(v);
+        public void reopen() {
+            btnInserisci.setVisible(false);
+            btnModificaSemplice.setVisible(true);
+            initialize();
+        }
+
+        private void initialize() {
+            createFrame();
+            initializeCombo();
+            addComponents();
 
             rdbtnLode.setEnabled(false);
             lblError.setForeground(Color.red);
             lblError.setVisible(false);
-
-            jp.add(lblNome);jp.add(txtNome);
-            jp.add(lblCognome);jp.add(txtCognome);
-            jp.add(lblInsegnamento);jp.add(txtInsegnamento);
-            jp.add(lblVotoFinale);jp.add(cmbxVotoFinale);
-            jp.add(lblNumCrediti);jp.add(txtNumCrediti);
-            jp.add(lblLode);jp.add(rdbtnLode);
-            jp.add(btnInserisci);jp.add(lblError);
 
             cmbxVotoFinale.addActionListener(new ActionListener() {
                 @Override
@@ -76,9 +75,10 @@ public class InserisciSempliceGUI extends JFrame {
             return obj;
         }
 
-        public boolean ctrlTextFields() {
+
+    public boolean ctrlTextFields() {
             if(txtNome.getText().isEmpty() || txtCognome.getText().isEmpty() ||
-                    txtInsegnamento.getText().isEmpty() || txtNumCrediti.getText().isEmpty())
+                    txtInsegnamento.getText().isEmpty() || txtNumCrediti.getText().isEmpty() || !isNumeric(txtNumCrediti.getText()))
                 return false;
             return true;
         }
@@ -97,14 +97,50 @@ public class InserisciSempliceGUI extends JFrame {
             return true;
         }
 
-    @Override
-    public String toString() {
+        public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            int i = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+        @Override
+        public String toString() {
         String s = "Esame semplice: ";
         for (Object obj: this.getDataJtbl()) {
             s += obj.toString() + ",";
         }
         s = s.substring(0,s.length()-1);
         return s;
+    }
+
+
+        private void createFrame() {
+        jf.setSize(400,400);
+        jf.setResizable(false);
+        jf.setLocationRelativeTo(null);
+        jf.setDefaultCloseOperation(HIDE_ON_CLOSE);
+    }
+
+        private void initializeCombo() {
+            Vector<Integer> v = new Vector<>();
+            for(int i = 1; i < 31; i++)
+                v.add(i);
+            cmbxVotoFinale = new JComboBox(v);
+        }
+
+        private void addComponents() {
+        jp.add(lblNome);jp.add(txtNome);
+        jp.add(lblCognome);jp.add(txtCognome);
+        jp.add(lblInsegnamento);jp.add(txtInsegnamento);
+        jp.add(lblVotoFinale);jp.add(cmbxVotoFinale);
+        jp.add(lblNumCrediti);jp.add(txtNumCrediti);
+        jp.add(lblLode);jp.add(rdbtnLode);
+        jp.add(btnInserisci);jp.add(lblError);
     }
 
     public JFrame getJf() {
@@ -149,6 +185,10 @@ public class InserisciSempliceGUI extends JFrame {
 
     public JLabel getLblVotoFinale() {
         return lblVotoFinale;
+    }
+
+    public JButton getBtnModificaSemplice() {
+        return btnModificaSemplice;
     }
 
     public void setLblVotoFinale(JLabel lblVotoFinale) {

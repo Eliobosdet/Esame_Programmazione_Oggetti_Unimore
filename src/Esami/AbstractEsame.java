@@ -37,12 +37,12 @@ public abstract class AbstractEsame
 
     @Override
     public String getTipoEsame() {
-        return null;
+        return tipoEsame;
     }
 
     @Override
     public int getCrediti() {
-        return 0;
+        return crediti;
     }
 
     @Override
@@ -52,7 +52,7 @@ public abstract class AbstractEsame
 
     @Override
     public void setCrediti(int crediti) {
-
+        this.crediti = crediti;
     }
 
     @Override
