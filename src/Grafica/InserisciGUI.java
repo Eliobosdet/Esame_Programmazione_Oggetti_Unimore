@@ -34,7 +34,8 @@ public abstract class InserisciGUI extends MediumFrame{
         btnModifica.setEnabled(false);
     }
 
-    public void reopen() {
+    public void reopen(String titolo, GridLayout gl) {
+        MediumFrame f = new MediumFrame(titolo,gl);
         btnModifica.setEnabled(true);
         btnInserisci.setEnabled(false);
     }
