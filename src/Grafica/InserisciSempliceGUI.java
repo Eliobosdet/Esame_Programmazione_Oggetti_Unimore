@@ -9,7 +9,7 @@ import java.util.Vector;
 public class InserisciSempliceGUI extends JFrame {
 
         private JFrame jf = new JFrame("Inserisci Esame Semplice");
-        private JPanel jp = new JPanel(new GridLayout(7,2));
+        private JPanel jp = new JPanel(new GridLayout(8,2));
 
         private JLabel lblNome=new JLabel("Nome studente: ");;
         private JLabel lblCognome=new JLabel("Cognome studente: ");
@@ -33,24 +33,8 @@ public class InserisciSempliceGUI extends JFrame {
 
         public InserisciSempliceGUI() {
             btnModificaSemplice.setVisible(false);
-            initialize();
-        }
-
-        public void reopen() {
-            btnInserisci.setVisible(false);
-            btnModificaSemplice.setVisible(true);
-            initialize();
-        }
-
-        private void initialize() {
-            createFrame();
             initializeCombo();
-            addComponents();
-
-            rdbtnLode.setEnabled(false);
-            lblError.setForeground(Color.red);
-            lblError.setVisible(false);
-
+            initialize();
             cmbxVotoFinale.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
@@ -63,6 +47,33 @@ public class InserisciSempliceGUI extends JFrame {
                     }
                 }
             });
+        }
+
+        public void reopen() {
+            btnInserisci.setVisible(false);
+            btnModificaSemplice.setVisible(true);
+            initialize();
+            cmbxVotoFinale.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    System.out.println("cmbox cambiata");
+                    if(String.valueOf(cmbxVotoFinale.getSelectedIndex()).equals("30"))
+                        rdbtnLode.setEnabled(true);
+                    else {
+                        rdbtnLode.setSelected(false);
+                        rdbtnLode.setEnabled(false);
+                    }
+                }
+            });
+        }
+
+        private void initialize() {
+            createFrame();
+            addComponents();
+
+            rdbtnLode.setEnabled(false);
+            lblError.setForeground(Color.red);
+            lblError.setVisible(false);
 
             jf.add(jp);
             jf.setVisible(true);
@@ -128,7 +139,7 @@ public class InserisciSempliceGUI extends JFrame {
 
         private void initializeCombo() {
             Vector<Integer> v = new Vector<>();
-            for(int i = 1; i < 31; i++)
+            for(int i = 0; i < 31; i++)
                 v.add(i);
             cmbxVotoFinale = new JComboBox(v);
         }
@@ -140,7 +151,8 @@ public class InserisciSempliceGUI extends JFrame {
         jp.add(lblVotoFinale);jp.add(cmbxVotoFinale);
         jp.add(lblNumCrediti);jp.add(txtNumCrediti);
         jp.add(lblLode);jp.add(rdbtnLode);
-        jp.add(btnInserisci);jp.add(lblError);
+        jp.add(btnInserisci);jp.add(btnModificaSemplice);
+        jp.add(lblError);
     }
 
     public JFrame getJf() {

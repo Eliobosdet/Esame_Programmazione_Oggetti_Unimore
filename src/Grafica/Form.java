@@ -182,9 +182,16 @@ public class Form {
         btnModificaEsame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int indice = jtbl.getSelectedRow();
+                int indice=0;
+                try {
+                    indice = jtbl.getSelectedRow();
+                } catch (Exception exeption) {
+                    System.err.println("Nessuna riga selezionata");
+                    return;
+                }
                 InserisciSempliceGUI f = frameSemplici.get(indice);
                 f.reopen();
+                int finalIndice = indice;
                 f.getBtnModificaSemplice().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -194,7 +201,7 @@ public class Form {
                         else {
                             System.out.println("Modifica avvenuta | "+f.toString());
                             f.getLblError().setVisible(false);
-                            modifyEsameSemplice(f,indice);
+                            modifyEsameSemplice(f, finalIndice);
                         }
                     }
                 });
