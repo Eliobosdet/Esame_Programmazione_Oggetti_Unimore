@@ -1,8 +1,8 @@
 package Esami;
 
 public class EsameSemplice extends AbstractEsame {
-    protected boolean lode;
-    protected static String tipo = "Esame Semplice";
+    private boolean lode;
+    private static String tipo = "Esame Semplice";
 
     public EsameSemplice(String nomeStudente, String cognomeStudente, String insegnamento,int votoFinale,int crediti, boolean lode) {
         super(nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti,tipo);

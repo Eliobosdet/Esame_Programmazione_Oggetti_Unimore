@@ -190,9 +190,11 @@ public class Form {
                     return;
                 }
                 InserisciSempliceGUI f = frameSemplici.get(indice);
-                f.reopen();
                 int finalIndice = indice;
-                f.getBtnModificaSemplice().addActionListener(new ActionListener() {
+                f.getBtnInserisci().setEnabled(false);
+                f.getBtnModifica().setEnabled(true);
+                f.reopen();
+                f.getBtnModifica().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if(!f.ctrlNumCrediti() || !f.ctrlTextFields()){     //Caso di errore
@@ -228,7 +230,9 @@ public class Form {
     }
 
     private void modifyEsameSemplice(InserisciSempliceGUI f, int row) {
+        Esame e = esami.get(row);
         Object[] obj = f.getDataJtbl();
+        e = new EsameSemplice(obj);
         for (int i = 0; i < obj.length; i++)
             tblmdl.setValueAt(obj[i],row,i);
         f.getJf().dispose();
