@@ -3,13 +3,10 @@ package Grafica;
 import Esami.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.table.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Form {
     //COMPONENTI GRAFICI
@@ -47,8 +44,8 @@ public class Form {
             return false;
         }
     };
-    ArrayList<Esame> esami = new ArrayList<Esame>(); //Esami memorizzati
-    ArrayList<InserisciSempliceGUI> frameSemplici = new ArrayList<InserisciSempliceGUI>();
+    ArrayList<Esame> esami = new ArrayList<>(); //Esami memorizzati
+    ArrayList<InserisciSempliceGUI> frameSemplici = new ArrayList<>();
     //ArrayList<Object[]> dataJtbl = new ArrayList<Object[]>(); //Esami stampati
     private int N_PARZ = 2;
     public Form() {
@@ -56,11 +53,6 @@ public class Form {
         jtbl.setModel(tblmdl);
         String[] columns = {"NomeStudente","CognomeStudente","Insegnamento","VotoFinale","NumeroCrediti","Lode","TipoEsame"};  //COLONNE DELLA TABLE
         for (String s: columns) { tblmdl.addColumn(s); }
-
-        TableColumnModel columnModel = jtbl.getColumnModel();
-
-        //columnModel.getColumn(5).setCellEditor(checkBoxEditor);
-        //columnModel.getColumn(5).getCellEditor().removeCellEditorListener();
 
         jtbl.setRowSelectionAllowed(true);  //Permette la selezione delle righe
 
@@ -83,7 +75,6 @@ public class Form {
                         voti[3] = Integer.parseInt(String.valueOf(cmbxVotoParz4.getSelectedIndex()));
                         //AGGIUNGO ESAMI PARZIALI ALL'ESAME COMPOSTO
 
-                        ArrayList<ProvaParziale> arrListParz = new ArrayList<ProvaParziale>();
                         EsameComposto ec = new EsameComposto();
                         addEsameComposto(ec,voti,perc);
                     }
@@ -101,7 +92,7 @@ public class Form {
                                 f.getLblError().setVisible(true);
                             }
                             else {
-                                System.out.println("Inserimento avvenuto | "+f.toString());
+                                System.out.println("Inserimento avvenuto | "+f);
                                 f.getLblError().setVisible(false);
                                 addEsameSemplice(f);
                             }
@@ -110,6 +101,9 @@ public class Form {
                 }
             }
         });
+
+
+
         cmboxTipoEsame.addActionListener(new ActionListener() { //Cambio ComboBox Tipo Esame
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -129,6 +123,9 @@ public class Form {
                 }
             }
         });
+
+
+
         btnAggiungiParz.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -154,6 +151,9 @@ public class Form {
                 System.out.println("N_PARZ: "+N_PARZ);
             }
         });
+
+
+
         btnRimuoviParz.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -179,9 +179,16 @@ public class Form {
                 System.out.println("N_PARZ: "+N_PARZ);
             }
         });
+
+
+
         btnModificaEsame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(jtbl.getSelectedRow()==-1){
+                    System.err.println("Nessuna riga selezionata!");
+                    return;
+                }
                 int indice=0;
                 try {
                     indice = jtbl.getSelectedRow();
@@ -191,8 +198,6 @@ public class Form {
                 }
                 InserisciSempliceGUI f = frameSemplici.get(indice);
                 int finalIndice = indice;
-                f.getBtnInserisci().setEnabled(false);
-                f.getBtnModifica().setEnabled(true);
                 f.reopen();
                 f.getBtnModifica().addActionListener(new ActionListener() {
                     @Override
@@ -201,7 +206,7 @@ public class Form {
                             f.getLblError().setVisible(true);
                         }
                         else {
-                            System.out.println("Modifica avvenuta | "+f.toString());
+                            System.out.println("Modifica avvenuta | "+f);
                             f.getLblError().setVisible(false);
                             modifyEsameSemplice(f, finalIndice);
                         }
@@ -209,6 +214,23 @@ public class Form {
                 });
             }
         });
+
+
+        btnEliminaEsame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(jtbl.getSelectedRow()==-1){
+                    System.err.println("Nessuna riga selezionata!");
+                    return;
+                }
+                int indice = jtbl.getSelectedRow();
+                tblmdl.removeRow(indice);
+                frameSemplici.remove(indice);
+            }
+        });
+
+
+
     }
 
     private void addEsameComposto(EsameComposto ec, int[] voti, int[] perc) {
@@ -224,7 +246,7 @@ public class Form {
         Object[] obj = frame.getDataJtbl();
         EsameSemplice es = new EsameSemplice(obj);
         esami.add(es);
-        System.out.println(esami.toString());
+        System.out.println(esami);
         tblmdl.addRow(obj);
         frame.getJf().dispose();
     }
@@ -313,10 +335,7 @@ public class Form {
             somma+=i;
         }
 
-        if(somma!=100)
-            return false;
-
-        return true;
+        return somma == 100;
     }
 
 

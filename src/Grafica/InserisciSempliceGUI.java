@@ -36,8 +36,10 @@ public class InserisciSempliceGUI extends InserisciGUI {
         super.setCmpVotoFinale(cmbxVotoFinale);
     }
 
+    @Override
     public void reopen() {
-        super.reopen("Modifica Esame",new GridLayout(8,2));
+        super.reopen();
+        this.addComponents();
         cmbxVotoFinale.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
