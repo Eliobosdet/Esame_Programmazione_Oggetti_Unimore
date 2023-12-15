@@ -13,7 +13,7 @@ public class InserisciSempliceGUI extends InserisciGUI {
     public InserisciSempliceGUI() {
         super("Esame Semplice", new GridLayout(8, 2));
         setCmbxVotoFinale();
-        addComponents();
+        this.addComponents();
         cmbxVotoFinale.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -57,7 +57,7 @@ public class InserisciSempliceGUI extends InserisciGUI {
     @Override
     public void addComponents() {
         super.addComponents();
-        getJp().add(getBtnInserisci());getJp().add(getBtnModifica());
+        getJp().add(getBtnInserisci()); getJp().add(getBtnModifica());
         getJp().add(getLblError());
     }
 

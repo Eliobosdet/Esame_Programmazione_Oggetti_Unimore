@@ -20,7 +20,7 @@ public abstract class InserisciGUI extends MediumFrame{
     private String s = "Qualcosa è andato storto,Riprova.";
     private JLabel lblError = new JLabel(s);
     private JButton btnInserisci = new JButton("Inserisci");
-    private JButton btnModifica = new JButton("Modifica");
+    private JButton btnModifica = new JButton("Salva");
 
     public InserisciGUI(String titolo) {
         this(titolo,new GridLayout(6,2));
