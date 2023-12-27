@@ -75,6 +75,15 @@
           <text value="Aggiungi Esame"/>
         </properties>
       </component>
+      <component id="f76aa" class="javax.swing.JButton" binding="btnMostraParziali">
+        <constraints>
+          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <enabled value="false"/>
+          <text value="Mostra Parziali"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>

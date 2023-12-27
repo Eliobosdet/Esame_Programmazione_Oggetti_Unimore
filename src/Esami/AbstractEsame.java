@@ -1,13 +1,17 @@
 package Esami;
 
+import Grafica.InserisciGUI;
+
 public abstract class AbstractEsame
         implements Esame {
-    protected String nomeStudente;
-    protected String cognomeStudente;
-    protected String insegnamento;
-    protected String tipoEsame;
-    protected int votoFinale;
-    protected int crediti;
+    private String nomeStudente;
+    private String cognomeStudente;
+    private String insegnamento;
+    private String tipoEsame;
+    private int votoFinale;
+    private int crediti;
+    private InserisciGUI gui;
+
 
     public AbstractEsame(String nomeStudente, String cognomeStudente, String insegnamento, int votoFinale, int crediti, String tipoEsame) {
         this.nomeStudente = nomeStudente;
@@ -27,12 +31,44 @@ public abstract class AbstractEsame
         this.crediti = 0;
     }
 
+    public AbstractEsame(InserisciGUI gui) {
+        this.gui = gui;
+    }
+
+
+
+
+
+
+
+
+
 
 
     @Override
     public Object[] getDataJtbl() {
         Object[] obj = {nomeStudente, cognomeStudente, insegnamento, votoFinale, crediti, tipoEsame};
         return obj;
+    }
+
+    @Override
+    public void setDataJtbl(Object[] obj) {
+        this.nomeStudente = String.valueOf(obj[0]);
+        this.cognomeStudente = String.valueOf(obj[1]);
+        this.insegnamento = String.valueOf(obj[2]);
+        this.votoFinale = Integer.parseInt(String.valueOf(obj[3]));
+        this.crediti = Integer.parseInt(String.valueOf(obj[4]));
+        this.tipoEsame = String.valueOf(obj[5]);
+    }
+
+    @Override
+    public InserisciGUI getGui() {
+        return gui;
+    }
+
+    @Override
+    public void setGui(InserisciGUI gui) {
+        this.gui = gui;
     }
 
     @Override

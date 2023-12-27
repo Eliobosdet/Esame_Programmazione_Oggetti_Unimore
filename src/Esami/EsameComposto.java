@@ -17,7 +17,7 @@ public class EsameComposto extends AbstractEsame {
 
     @Override
     public Object[] getDataJtbl() {
-        Object[] obj = {nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti,"false",tipoEsame};
+        Object[] obj = {getNomeStudente(),getCognomeStudente(),getInsegnamento(),getVotoFinale(),getCrediti(),"false",getTipoEsame()};
         return obj;
     }
 
@@ -26,7 +26,7 @@ public class EsameComposto extends AbstractEsame {
     }
 
     public int getCrediti() {
-        return crediti;
+        return getCrediti();
     }
 
     public ArrayList<ProvaParziale> getArrList_parziali() {
@@ -38,7 +38,7 @@ public class EsameComposto extends AbstractEsame {
     }
 
     public void setCrediti(int crediti) {
-        this.crediti = crediti;
+        setCrediti(crediti);
     }
 
     public void setArrList_parziali(ArrayList<ProvaParziale> arrList_parziali) {

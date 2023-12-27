@@ -16,6 +16,7 @@ public class Form {
     private JComboBox cmboxTipoEsame;
     private JButton btnModificaEsame;
     private JButton btnEliminaEsame;
+    private JButton btnMostraParziali;
 
 
     //COMPONENTI LOGICI
@@ -27,14 +28,14 @@ public class Form {
         }
     };
     ArrayList<Esame> esami = new ArrayList<>(); //Esami memorizzati
-    ArrayList<InserisciSempliceGUI> frameSemplici = new ArrayList<>();
-    ArrayList<InserisciCompostoGUI> frameComposti = new ArrayList<>();
+    //ArrayList<InserisciSempliceGUI> frameSemplici = new ArrayList<>();
+    //ArrayList<InserisciCompostoGUI> frameComposti = new ArrayList<>();
     //ArrayList<Object[]> dataJtbl = new ArrayList<Object[]>(); //Esami stampati
     private int N_PARZ = 2;
     public Form() {
 
         jtbl.setModel(tblmdl);
-        String[] columns = {"NomeStudente","CognomeStudente","Insegnamento","VotoFinale","NumeroCrediti","Lode","TipoEsame"};  //COLONNE DELLA TABLE
+        String[] columns = {"NomeStudente","CognomeStudente","Insegnamento","VotoFinale","NumeroCrediti","TipoEsame","Lode"};  //COLONNE DELLA TABLE
         for (String s: columns) { tblmdl.addColumn(s); }
 
         jtbl.setRowSelectionAllowed(true);  //Permette la selezione delle righe
@@ -47,12 +48,20 @@ public class Form {
                 if(cmboxTipoEsame.getSelectedIndex()==1) {  //Esame Composto
                     System.out.println("Esame composto");
                     InserisciCompostoGUI f = new InserisciCompostoGUI();
-                    frameComposti.add(f);
+                    f.getBtnInserisci().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            if(!f.ctrlNumCrediti() || !f.ctrlTextFields()){     //Caso di errore
+                                f.getLblError().setVisible(true);
+                            } else {
+
+                            }
+                        }
+                    });
                 }
                 else {    //Esame Semplice
                     System.out.println("Esame semplice");
                     InserisciSempliceGUI f = new InserisciSempliceGUI();
-                    frameSemplici.add(f);
                     f.getBtnInserisci().addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -86,24 +95,10 @@ public class Form {
                     System.err.println("Nessuna riga selezionata");
                     return;
                 }
-                InserisciSempliceGUI f = frameSemplici.get(indice);
-                int finalIndice = indice;
-                f.reopen();
-                f.getBtnModifica().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if(!f.ctrlNumCrediti() || !f.ctrlTextFields()){     //Caso di errore
-                            f.getLblError().setVisible(true);
-                        }
-                        else {
-                            System.out.println("Modifica avvenuta | "+f);
-                            f.getLblError().setVisible(false);
-                            modifyEsameSemplice(f, finalIndice);
-                        }
-                    }
-                });
+                modifyEsame(indice);
             }
         });
+
 
 
         btnEliminaEsame.addActionListener(new ActionListener() {
@@ -115,12 +110,32 @@ public class Form {
                 }
                 int indice = jtbl.getSelectedRow();
                 tblmdl.removeRow(indice);
-                frameSemplici.remove(indice);
+                esami.remove(indice);
             }
         });
 
 
 
+    }
+
+    private void modifyEsame(int indice) {
+        EsameSemplice es = (EsameSemplice) esami.get(indice);
+        InserisciSempliceGUI f = es.getGui();
+        int finalIndice = indice;
+        f.reopen();
+        f.getBtnModifica().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!f.ctrlNumCrediti() || !f.ctrlTextFields()){     //Caso di errore
+                    f.getLblError().setVisible(true);
+                }
+                else {
+                    System.out.println("Modifica avvenuta | "+f);
+                    f.getLblError().setVisible(false);
+                    resetValuesEsameSemplice(f, finalIndice);
+                }
+            }
+        });
     }
 
     private void addEsameComposto(EsameComposto ec, int[] voti, int[] perc) {
@@ -134,14 +149,15 @@ public class Form {
 
     private void addEsameSemplice(InserisciSempliceGUI frame) {
         Object[] obj = frame.getDataJtbl();
-        EsameSemplice es = new EsameSemplice(obj);
+        EsameSemplice es = new EsameSemplice(obj,frame);
         esami.add(es);
         System.out.println(esami);
         tblmdl.addRow(obj);
         frame.getJf().dispose();
     }
 
-    private void modifyEsameSemplice(InserisciSempliceGUI f, int row) {
+
+    private void resetValuesEsameSemplice(InserisciSempliceGUI f, int row) {
         Esame e = esami.get(row);
         Object[] obj = f.getDataJtbl();
         e = new EsameSemplice(obj);

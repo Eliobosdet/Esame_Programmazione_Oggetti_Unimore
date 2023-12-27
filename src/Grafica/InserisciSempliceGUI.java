@@ -71,8 +71,8 @@ public class InserisciSempliceGUI extends InserisciGUI {
 
     public Object[] getDataJtbl() {
         Object[] obj = {getTxtNome().getText().toUpperCase(), getTxtCognome().getText().toUpperCase(), getTxtInsegnamento().getText().toUpperCase(),
-                Integer.parseInt(String.valueOf(cmbxVotoFinale.getSelectedIndex()).toUpperCase()), getTxtNumCrediti().getText().toUpperCase(),
-                getRdbtnLode().isSelected(), "Esame Semplice"};
+                Integer.parseInt(String.valueOf(cmbxVotoFinale.getSelectedIndex())), getTxtNumCrediti().getText(),
+                "Esame Semplice",getRdbtnLode().isSelected()};
         return obj;
     }
 

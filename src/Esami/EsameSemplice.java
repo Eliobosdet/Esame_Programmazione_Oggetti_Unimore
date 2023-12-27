@@ -1,5 +1,8 @@
 package Esami;
 
+import Grafica.InserisciGUI;
+import Grafica.InserisciSempliceGUI;
+
 public class EsameSemplice extends AbstractEsame {
     private boolean lode;
     private static String tipo = "Esame Semplice";
@@ -11,19 +14,55 @@ public class EsameSemplice extends AbstractEsame {
 
     public EsameSemplice(Object[] obj) {
         super(String.valueOf(obj[0]),String.valueOf(obj[1]),String.valueOf(obj[2]),Integer.parseInt(String.valueOf(obj[3])),Integer.parseInt(String.valueOf(obj[4])),tipo);
-        this.lode = (boolean) obj[5];
+        this.lode = (boolean) obj[6];
+    }
+
+    public EsameSemplice(Object[] obj,InserisciSempliceGUI frame) {
+        this(obj);
+        setGui(frame);
+    }
+
+    public EsameSemplice(InserisciSempliceGUI gui) {
+        super(gui);
     }
 
     public EsameSemplice(){
         super(tipo);
         this.lode=false;
-        this.crediti=0;
+        super.setCrediti(0);
     }
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public Object[] getDataJtbl() {
-        Object[] obj = {nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti,lode,tipo};
+        Object[] obj = {getNomeStudente(),getCognomeStudente(),getInsegnamento(),getVotoFinale(),getCrediti(),lode,tipo};
         return obj;
+    }
+
+    @Override
+    public void setDataJtbl(Object[] obj) {
+        super.setDataJtbl(obj);
+        this.lode = Boolean.parseBoolean(String.valueOf(obj[6]));
+    }
+
+    @Override
+    public InserisciSempliceGUI getGui() {
+        return (InserisciSempliceGUI) super.getGui();
+    }
+
+    @Override
+    public void setGui(InserisciGUI gui) {
+        super.setGui(gui);
     }
 
     public boolean isLode() {
