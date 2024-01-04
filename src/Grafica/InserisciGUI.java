@@ -17,8 +17,7 @@ public abstract class InserisciGUI extends MediumFrame{
     private JComponent cmpVotoFinale = new JComponent() {};
     private JTextField txtNumCrediti = new JTextField();
     private JRadioButton rdbtnLode = new JRadioButton();
-    private String s = "Qualcosa è andato storto,Riprova.";
-    private JLabel lblError = new JLabel(s);
+    private JLabel lblError = new JLabel("Qualcosa è andato storto,Riprova.");
     private JButton btnInserisci = new JButton("Inserisci");
     private JButton btnModifica = new JButton("Salva");
 
@@ -35,7 +34,7 @@ public abstract class InserisciGUI extends MediumFrame{
     }
 
     public void reopen() {
-        getJf().setVisible(true);
+        super.setVisible(true);
         btnModifica.setEnabled(true);
         btnInserisci.setEnabled(false);
     }
@@ -70,7 +69,6 @@ public abstract class InserisciGUI extends MediumFrame{
         return true;
     }
 
-
     public static boolean isNumeric(String strNum) {
         if (strNum == null) {
             return false;
@@ -90,125 +88,36 @@ public abstract class InserisciGUI extends MediumFrame{
 
     //GETTER E SETTER
 
-
-    public JLabel getLblNome() {
-        return lblNome;
-    }
-
-    public void setLblNome(JLabel lblNome) {
-        this.lblNome = lblNome;
-    }
-
-    public JLabel getLblCognome() {
-        return lblCognome;
-    }
-
-    public void setLblCognome(JLabel lblCognome) {
-        this.lblCognome = lblCognome;
-    }
-
-    public JLabel getLblInsegnamento() {
-        return lblInsegnamento;
-    }
-
-    public void setLblInsegnamento(JLabel lblInsegnamento) {
-        this.lblInsegnamento = lblInsegnamento;
-    }
-
-    public JLabel getLblVotoFinale() {
-        return lblVotoFinale;
-    }
-
-    public void setLblVotoFinale(JLabel lblVotoFinale) {
-        this.lblVotoFinale = lblVotoFinale;
-    }
-
-    public JLabel getLblNumCrediti() {
-        return lblNumCrediti;
-    }
-
-    public void setLblNumCrediti(JLabel lblNumCrediti) {
-        this.lblNumCrediti = lblNumCrediti;
-    }
-
-    public JLabel getLblLode() {
-        return lblLode;
-    }
-
-    public void setLblLode(JLabel lblLode) {
-        this.lblLode = lblLode;
-    }
-
     public JTextField getTxtNome() {
         return txtNome;
-    }
-
-    public void setTxtNome(JTextField txtNome) {
-        this.txtNome = txtNome;
     }
 
     public JTextField getTxtCognome() {
         return txtCognome;
     }
 
-    public void setTxtCognome(JTextField txtCognome) {
-        this.txtCognome = txtCognome;
-    }
-
     public JTextField getTxtInsegnamento() {
         return txtInsegnamento;
-    }
-
-    public void setTxtInsegnamento(JTextField txtInsegnamento) {
-        this.txtInsegnamento = txtInsegnamento;
     }
 
     public JTextField getTxtNumCrediti() {
         return txtNumCrediti;
     }
 
-    public void setTxtNumCrediti(JTextField txtNumCrediti) {
-        this.txtNumCrediti = txtNumCrediti;
-    }
-
     public JRadioButton getRdbtnLode() {
         return rdbtnLode;
     }
 
-    public void setRdbtnLode(JRadioButton rdbtnLode) {
-        this.rdbtnLode = rdbtnLode;
-    }
+    public JLabel getLblError() { return lblError; }
 
-    public String getS() {
-        return s;
-    }
-
-    public void setS(String s) {
-        this.s = s;
-    }
-
-    public JLabel getLblError() {
-        return lblError;
-    }
-
-    public void setLblError(JLabel lblError) {
-        this.lblError = lblError;
-    }
+    public void setLblError(String s) { this.lblError.setText(s); }
 
     public JButton getBtnInserisci() {
         return btnInserisci;
     }
 
-    public void setBtnInserisci(JButton btnInserisci) {
-        this.btnInserisci = btnInserisci;
-    }
-
     public JButton getBtnModifica() {
         return btnModifica;
-    }
-
-    public void setBtnModificaSemplice(JButton btnModificaSemplice) {
-        this.btnModifica = btnModifica;
     }
 
     public JComponent getCmpVotoFinale() {

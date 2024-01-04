@@ -52,10 +52,28 @@ public class Form {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
                             if(!f.ctrlNumCrediti() || !f.ctrlTextFields()){     //Caso di errore
+                                f.setLblError("Qualcosa è andato storto,Riprova.");
                                 f.getLblError().setVisible(true);
                             } else {
+                                System.out.println("Inserisco parziali");
+                                if(f.getParzialiGUI() != null)
+                                    f.setParzialiGUI(new InserisciParzialiGUI());
+                                else
 
                             }
+                        }
+                    });
+                    f.getBtnModificaParziali().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            /*if(!f.ctrlNumParziali()) {
+                                f.setLblError("Numero di parziali non sufficiente.");
+                                f.getLblError().setVisible(true);
+                            } else {
+                                f.setParzialiGUI(new InserisciParzialiGUI());
+                            }*/
+                            //if(f.getTxtNumCrediti().getText())
+                            //f.setParzialiGUI(new InserisciParzialiGUI());
                         }
                     });
                 }
@@ -153,7 +171,7 @@ public class Form {
         esami.add(es);
         System.out.println(esami);
         tblmdl.addRow(obj);
-        frame.getJf().dispose();
+        frame.dispose();
     }
 
 
@@ -163,7 +181,7 @@ public class Form {
         e = new EsameSemplice(obj);
         for (int i = 0; i < obj.length; i++)
             tblmdl.setValueAt(obj[i],row,i);
-        f.getJf().dispose();
+        f.dispose();
     }
 
 

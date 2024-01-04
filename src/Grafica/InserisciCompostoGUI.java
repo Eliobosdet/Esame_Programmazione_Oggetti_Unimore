@@ -5,10 +5,10 @@ import java.awt.*;
 
 public class InserisciCompostoGUI extends InserisciGUI {
 
-    private JLabel lblNumParziali = new JLabel("Numero parziali:");
-    private JTextField txtNumParziali = new JTextField();
+    //private JLabel lblNumParziali = new JLabel("Numero parziali:");
+    //private JTextField txtNumParziali = new JTextField();
     private JButton btnModificaParziali = new JButton("Modifica Parziali");
-    private MediumFrame parzialiGUI;
+    private InserisciParzialiGUI parzialiGUI = null;
 
     public InserisciCompostoGUI() {
         super("Esame Composto",new GridLayout(9,2));
@@ -18,18 +18,22 @@ public class InserisciCompostoGUI extends InserisciGUI {
 
     }
 
-    @Override
+    /*@Override
     public boolean ctrlTextFields() {
-        return super.ctrlTextFields() && txtNumParziali.getText().isEmpty();
-    }
+        return super.ctrlTextFields() && !txtNumParziali.getText().isEmpty();
+    }*/
 
     @Override
     public void addComponents() {
         super.addComponents();
-        getJp().add(lblNumParziali); getJp().add(txtNumParziali);
+        //getJp().add(lblNumParziali); getJp().add(txtNumParziali);
         getJp().add(getBtnInserisci()); getJp().add(getBtnModifica());
         getJp().add(btnModificaParziali); getJp().add(getLblError());
     }
+
+    /*public boolean ctrlNumParziali() {
+        return Integer.parseInt(txtNumParziali.getText()) > 1;
+    }*/
 
     public Object[] getDataJtbl() {
         JTextField txtVotoFinale = (JTextField) getCmpVotoFinale();
@@ -39,11 +43,17 @@ public class InserisciCompostoGUI extends InserisciGUI {
         return obj;
     }
 
-    public MediumFrame getParzialiGUI() {
+    public InserisciParzialiGUI getParzialiGUI() {
         return parzialiGUI;
     }
 
-    public void setParzialiGUI(MediumFrame parzialiGUI) {
+    public void setParzialiGUI(InserisciParzialiGUI parzialiGUI) {
         this.parzialiGUI = parzialiGUI;
     }
+
+    public JButton getBtnModificaParziali() {
+        return btnModificaParziali;
+    }
+
+
 }
