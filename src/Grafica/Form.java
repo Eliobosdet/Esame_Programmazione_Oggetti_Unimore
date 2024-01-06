@@ -56,9 +56,10 @@ public class Form {
                                 f.getLblError().setVisible(true);
                             } else {
                                 System.out.println("Inserisco parziali");
-                                if(f.getParzialiGUI() != null)
+                                if(f.getParzialiGUI() == null)
                                     f.setParzialiGUI(new InserisciParzialiGUI());
-                                else
+                                //else
+
 
                             }
                         }
