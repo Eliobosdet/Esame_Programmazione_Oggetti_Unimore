@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 
 public class InserisciParzialiGUI extends JFrame{
     int numParziali = 2;
@@ -15,8 +16,8 @@ public class InserisciParzialiGUI extends JFrame{
     ArrayList<ProvaParziale> partials = new ArrayList<>();
 
     JComboBox<Integer> cmbxNumParziali;
+    JLabel lblVoto;
     JButton btnSalva = new JButton("Salva");
-    JLabel lblError = new JLabel("Percentuali non corrette.");
 
     GridLayout gl = new GridLayout(numParziali,3);
     JPanel container = new JPanel();
@@ -24,32 +25,11 @@ public class InserisciParzialiGUI extends JFrame{
 
     public InserisciParzialiGUI() {
         container.setLayout(new BoxLayout(container,BoxLayout.Y_AXIS));
-
-        jp1.setLayout(new BorderLayout());
-        jp1.setMaximumSize(new Dimension(800,300));
-        setCmbxNumParziali();
-
-        jp1.add(cmbxNumParziali, BorderLayout.CENTER);
-
-        jp2.setLayout(new GridLayout(1,3));
-        jp2.setMaximumSize(new Dimension(800,200));
-        jp2.add(new JLabel("Numero parziale"));
-        jp2.add(new JLabel("Voto parziale(0-30)"));
-        jp2.add(new JLabel("Percentuale parziale(%)"));
-
-        jp3.setLayout(gl);
-        jp3.setMaximumSize(new Dimension(800,1080));
-        createComponents();
-        addComponents();
-
-        jp4.setLayout(new BorderLayout());
-        jp4.add(btnSalva,BorderLayout.CENTER);
-        jp4.setMaximumSize(new Dimension(800,300));
-
-        container.add(jp1);
-        container.add(jp2);
-        container.add(jp3);
-        container.add(jp4);
+        loadJp1();
+        loadJp2();
+        loadJp3();
+        loadJp4();
+        container.add(jp1);container.add(jp2);container.add(jp3);container.add(jp4);
 
         this.cmbxNumParziali.addActionListener(new ActionListener() {
             @Override
@@ -65,6 +45,34 @@ public class InserisciParzialiGUI extends JFrame{
             }
         });
 
+        setFrame();
+    }
+
+    public InserisciParzialiGUI(JLabel jl) {
+        this();
+        actionBtnSalva(jl);
+    }
+
+    public InserisciParzialiGUI(JLabel jl, ArrayList<ProvaParziale> a, int numParziali) {
+        this();
+        this.numParziali = numParziali;
+        cmbxNumParziali.setSelectedIndex(numParziali-2);
+        setIndex(a);
+        actionBtnSalva(jl);
+    }
+
+    private void setIndex(ArrayList<ProvaParziale> a) {
+        int i_parz = 0;
+        for(int i = 1; i < numParziali*3; i+=2, i_parz++) {
+            JComboBox<Integer> j = (JComboBox<Integer>)components.get(i);
+            j.setSelectedIndex(a.get(i_parz).getVotoFinale());
+            i++;
+            JComboBox<Integer> j2 = (JComboBox<Integer>)components.get(i);
+            j2.setSelectedIndex(a.get(i_parz).getVotoFinale());
+        }
+    }
+
+    private void setFrame() {
         add(container);
         //setResizable(false);
         setLocationRelativeTo(null);
@@ -73,22 +81,74 @@ public class InserisciParzialiGUI extends JFrame{
         setVisible(true);
     }
 
+    public void actionBtnSalva(JLabel jl) {
+        btnSalva.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                if(ctrlPerc()) {
+                    readPartials();
+                    setVisible(false);
+                    System.out.println(String.valueOf(calcVoto()));
+                    jl.setText(String.valueOf(calcVoto()));
+                    System.out.println(jl.getText());
+                }
+                else {
+                    JOptionPane.showMessageDialog(null,"Percentuali non corrette.\n In caso di numero parziali dispari, l'arrotondamento delle percentuali potrebbe essere 99%");
+                }
+            }
+        });
+    }
+
+    private void loadJp1() {
+        jp1.setLayout(new BorderLayout());
+        jp1.setMaximumSize(new Dimension(800,300));
+        setCmbxNumParziali();
+        jp1.add(cmbxNumParziali, BorderLayout.CENTER);
+    }
+
+    private void loadJp2() {
+        jp2.setLayout(new GridLayout(1,3));
+        jp2.setMaximumSize(new Dimension(800,200));
+        jp2.add(new JLabel("Numero parziale"));
+        jp2.add(new JLabel("Voto parziale(0-30)"));
+        jp2.add(new JLabel("Percentuale parziale(%)"));
+    }
+
+    private void loadJp3() {
+        jp3.setLayout(gl);
+        jp3.setMaximumSize(new Dimension(800,1080));
+        createComponents();
+        addComponents();
+    }
+
+    private void loadJp4() {
+        jp4.setLayout(new BorderLayout());
+        jp4.add(btnSalva,BorderLayout.CENTER);
+        jp4.setMaximumSize(new Dimension(800,300));
+    }
+
     public int calcVoto() {
         int med = 0;
         for (ProvaParziale p:
              partials) {
+            System.out.println("Voto: "+p.getVotoFinale()+" Peso: "+p.getPesoPercentuale());
             med += (p.getVotoFinale()*p.getPesoPercentuale());
+            System.out.println("media: "+med);
         }
         return med / 100;
     }
 
     public void readPartials() {
+        partials.clear();
         for(int i = 1; i < numParziali*3; i+=2) {
             JComboBox<Integer> jc = (JComboBox<Integer>) components.get(i);
             int voto = jc.getItemAt(jc.getSelectedIndex());
+            System.out.println("voto: "+voto);
             i++;
             JComboBox<Integer> jc2 = (JComboBox<Integer>) components.get(i);
-            int perc = jc.getItemAt(jc.getSelectedIndex());
+            int perc = jc2.getItemAt(jc2.getSelectedIndex());
+            System.out.println("perc: "+perc);
             partials.add(new ProvaParziale(voto,perc));
         }
     }
@@ -131,7 +191,7 @@ public class InserisciParzialiGUI extends JFrame{
 
     private Vector<Integer> getVectorVoti() {
         Vector<Integer> v = new Vector<>();
-        for (int i = 0; i < 31; i++)
+        for (int i = 18; i < 31; i++)
             v.add(i);
         return v;
     }
@@ -151,11 +211,19 @@ public class InserisciParzialiGUI extends JFrame{
         return btnSalva;
     }
 
-    public JLabel getLblError() {
-        return lblError;
-    }
-
     public JPanel getJp3() {
         return jp3;
+    }
+
+    public int getNumParziali() {
+        return numParziali;
+    }
+
+    public ArrayList<ProvaParziale> getPartials() {
+        return partials;
+    }
+
+    public void setPartials(ArrayList<ProvaParziale> partials) {
+        this.partials = partials;
     }
 }

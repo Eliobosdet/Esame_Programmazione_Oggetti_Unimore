@@ -18,7 +18,7 @@ public class InserisciSempliceGUI extends InserisciGUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("cmbox cambiata");
-                if (String.valueOf(cmbxVotoFinale.getSelectedIndex()).equals("30"))
+                if ((Integer)cmbxVotoFinale.getItemAt(cmbxVotoFinale.getSelectedIndex())==30)
                     getRdbtnLode().setEnabled(true);
                 else {
                     getRdbtnLode().setSelected(false);
@@ -30,7 +30,7 @@ public class InserisciSempliceGUI extends InserisciGUI {
 
     public void setCmbxVotoFinale() {
         Vector<Integer> v = new Vector<>();
-        for (int i = 0; i < 31; i++)
+        for (int i = 18; i < 31; i++)
             v.add(i);
         cmbxVotoFinale = new JComboBox(v);
         super.setCmpVotoFinale(cmbxVotoFinale);
@@ -44,7 +44,7 @@ public class InserisciSempliceGUI extends InserisciGUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("cmbox cambiata");
-                if (String.valueOf(cmbxVotoFinale.getSelectedIndex()).equals("30"))
+                if ((Integer)cmbxVotoFinale.getItemAt(cmbxVotoFinale.getSelectedIndex())==30)
                     getRdbtnLode().setEnabled(true);
                 else {
                     getRdbtnLode().setSelected(false);
@@ -70,9 +70,9 @@ public class InserisciSempliceGUI extends InserisciGUI {
         }*/
 
     public Object[] getDataJtbl() {
-        Object[] obj = {getTxtNome().getText().toUpperCase(), getTxtCognome().getText().toUpperCase(), getTxtInsegnamento().getText().toUpperCase(),
-                Integer.parseInt(String.valueOf(cmbxVotoFinale.getSelectedIndex())), getTxtNumCrediti().getText(),
-                "Esame Semplice",getRdbtnLode().isSelected()};
+        Object[] obj = {getTxtNome().getText(), getTxtCognome().getText(), getTxtInsegnamento().getText(),
+                Integer.parseInt(String.valueOf(cmbxVotoFinale.getSelectedIndex()+18)), getTxtNumCrediti().getText(),
+                getRdbtnLode().isSelected(),"0"};
         return obj;
     }
 

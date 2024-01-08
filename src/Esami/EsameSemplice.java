@@ -5,16 +5,15 @@ import Grafica.InserisciSempliceGUI;
 
 public class EsameSemplice extends AbstractEsame {
     private boolean lode;
-    private static String tipo = "Esame Semplice";
 
     public EsameSemplice(String nomeStudente, String cognomeStudente, String insegnamento,int votoFinale,int crediti, boolean lode) {
-        super(nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti,tipo);
+        super(nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti);
         this.lode=lode;
     }
 
     public EsameSemplice(Object[] obj) {
-        super(String.valueOf(obj[0]),String.valueOf(obj[1]),String.valueOf(obj[2]),Integer.parseInt(String.valueOf(obj[3])),Integer.parseInt(String.valueOf(obj[4])),tipo);
-        this.lode = (boolean) obj[6];
+        super(String.valueOf(obj[0]),String.valueOf(obj[1]),String.valueOf(obj[2]),Integer.parseInt(String.valueOf(obj[3])),Integer.parseInt(String.valueOf(obj[4])));
+        this.lode = (boolean) obj[5];
     }
 
     public EsameSemplice(Object[] obj,InserisciSempliceGUI frame) {
@@ -22,30 +21,20 @@ public class EsameSemplice extends AbstractEsame {
         setGui(frame);
     }
 
-    public EsameSemplice(InserisciSempliceGUI gui) {
+    /*public EsameSemplice(InserisciSempliceGUI gui) {
         super(gui);
-    }
+    }*/
 
     public EsameSemplice(){
-        super(tipo);
+        super();
         this.lode=false;
         super.setCrediti(0);
     }
 
 
-
-
-
-
-
-
-
-
-
-
     @Override
     public Object[] getDataJtbl() {
-        Object[] obj = {getNomeStudente(),getCognomeStudente(),getInsegnamento(),getVotoFinale(),getCrediti(),lode,tipo};
+        Object[] obj = {getNomeStudente(),getCognomeStudente(),getInsegnamento(),getVotoFinale(),getCrediti(),lode,"0"};
         return obj;
     }
 

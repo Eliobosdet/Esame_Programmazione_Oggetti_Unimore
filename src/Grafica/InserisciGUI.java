@@ -33,6 +33,10 @@ public abstract class InserisciGUI extends MediumFrame{
         btnModifica.setEnabled(false);
     }
 
+    public InserisciGUI(Object[] obj) {
+
+    }
+
     public void reopen() {
         super.setVisible(true);
         btnModifica.setEnabled(true);

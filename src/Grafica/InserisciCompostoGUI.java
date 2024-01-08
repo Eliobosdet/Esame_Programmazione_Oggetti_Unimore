@@ -1,14 +1,15 @@
 package Grafica;
 
+import Esami.ProvaParziale;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class InserisciCompostoGUI extends InserisciGUI {
 
-    //private JLabel lblNumParziali = new JLabel("Numero parziali:");
-    //private JTextField txtNumParziali = new JTextField();
     private JButton btnModificaParziali = new JButton("Modifica Parziali");
     private InserisciParzialiGUI parzialiGUI;
     private int voto = 0;
@@ -23,27 +24,20 @@ public class InserisciCompostoGUI extends InserisciGUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(parzialiGUI == null)
-                    parzialiGUI = new InserisciParzialiGUI();
+                    parzialiGUI = new InserisciParzialiGUI((JLabel) getCmpVotoFinale());
                 else
                     parzialiGUI.setVisible(true);
             }
         });
+    }
 
-        parzialiGUI.getBtnSalva().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if(parzialiGUI.ctrlPerc()) {
-                    parzialiGUI.readPartials();
-                    if(parzialiGUI.getLblError().getParent() == parzialiGUI.getJp3())
-                        parzialiGUI.getJp3().remove(parzialiGUI.getLblError());
-                    parzialiGUI.setVisible(false);
-                    calcVoto();
-                }
-                else
-                    parzialiGUI.getJp3().add(parzialiGUI.getLblError());
-            }
-        });
-
+    public InserisciCompostoGUI(Object[] obj) {
+        this();
+        getTxtNome().setText(String.valueOf(obj[0]));
+        getTxtCognome().setText(String.valueOf(obj[1]));
+        getTxtInsegnamento().setText(String.valueOf(obj[2]));
+        JLabel jl = (JLabel)getCmpVotoFinale(); jl.setText(""+obj[3]);
+        getTxtNumCrediti().setText(String.valueOf(obj[4]));
     }
 
     /*@Override
@@ -64,10 +58,10 @@ public class InserisciCompostoGUI extends InserisciGUI {
     }*/
 
     public Object[] getDataJtbl() {
-        JTextField txtVotoFinale = (JTextField) getCmpVotoFinale();
-        Object[] obj = {getTxtNome().getText().toUpperCase(), getTxtCognome().getText().toUpperCase(), getTxtInsegnamento().getText().toUpperCase(),
-                Integer.parseInt(String.valueOf(txtVotoFinale.getText())), getTxtNumCrediti().getText().toUpperCase(),
-                "Esame Semplice",getRdbtnLode().isSelected()};
+        JLabel lblVotoFinale = (JLabel) getCmpVotoFinale();
+        Object[] obj = {getTxtNome().getText(), getTxtCognome().getText(), getTxtInsegnamento().getText(),
+                Integer.parseInt(lblVotoFinale.getText()), getTxtNumCrediti().getText(),
+                "false", parzialiGUI.getNumParziali()};
         return obj;
     }
 
@@ -83,7 +77,8 @@ public class InserisciCompostoGUI extends InserisciGUI {
         return btnModificaParziali;
     }
 
-    private void calcVoto() {
-
+    public ArrayList<ProvaParziale> getArrayListParziali() {
+        return parzialiGUI.getPartials();
     }
+
 }

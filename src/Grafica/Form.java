@@ -6,6 +6,10 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Form {
@@ -17,7 +21,8 @@ public class Form {
     private JButton btnModificaEsame;
     private JButton btnEliminaEsame;
     private JButton btnMostraParziali;
-
+    private JButton btnSalva;
+    private JButton btnCarica;
 
     //COMPONENTI LOGICI
     DefaultTableModel tblmdl = new DefaultTableModel() {
@@ -27,15 +32,15 @@ public class Form {
             return false;
         }
     };
+
+    JFileChooser jFileChooser = new JFileChooser();
+    File file;
     ArrayList<Esame> esami = new ArrayList<>(); //Esami memorizzati
-    //ArrayList<InserisciSempliceGUI> frameSemplici = new ArrayList<>();
-    //ArrayList<InserisciCompostoGUI> frameComposti = new ArrayList<>();
-    //ArrayList<Object[]> dataJtbl = new ArrayList<Object[]>(); //Esami stampati
-    private int N_PARZ = 2;
+
     public Form() {
 
         jtbl.setModel(tblmdl);
-        String[] columns = {"NomeStudente","CognomeStudente","Insegnamento","VotoFinale","NumeroCrediti","TipoEsame","Lode"};  //COLONNE DELLA TABLE
+        String[] columns = {"NomeStudente","CognomeStudente","Insegnamento","VotoFinale","NumeroCrediti","TipoEsame","Lode","NumeroParziali"};  //COLONNE DELLA TABLE
         for (String s: columns) { tblmdl.addColumn(s); }
 
         jtbl.setRowSelectionAllowed(true);  //Permette la selezione delle righe
@@ -57,10 +62,9 @@ public class Form {
                             } else {
                                 System.out.println("Inserisco parziali");
                                 if(f.getParzialiGUI() == null)
-                                    f.setParzialiGUI(new InserisciParzialiGUI());
-                                //else
-
-
+                                    f.setParzialiGUI(new InserisciParzialiGUI((JLabel)  f.getCmpVotoFinale()));
+                                else
+                                    addEsameComposto(f);
                             }
                         }
                     });
@@ -124,7 +128,7 @@ public class Form {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(jtbl.getSelectedRow()==-1){
-                    System.err.println("Nessuna riga selezionata!");
+                    JOptionPane.showMessageDialog(null,"Nessuna riga selezionata!");
                     return;
                 }
                 int indice = jtbl.getSelectedRow();
@@ -134,7 +138,41 @@ public class Form {
         });
 
 
+        btnSalva.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(jFileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
+                    file = new File(jFileChooser.getSelectedFile().getAbsolutePath());
+                    try {
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
+                        for (Esame e: esami) {
+                            if (e instanceof EsameSemplice) {
+                                EsameSemplice es = (EsameSemplice) e;
+                                Object[] obj = es.getDataJtbl();
+                                for (Object o: obj) {
+                                    writer.write(o.toString()+",");
+                                }
+                            } else {
+                                EsameComposto es = (EsameComposto) e;
+                                Object[] obj = es.getDataJtbl();
+                                for (Object o: obj) {
+                                    writer.write(o.toString()+",");
+                                }
+                                for (ProvaParziale pp:es.getArrList_parziali()) {
+                                    writer.write(pp.getVotoFinale()+","+pp.getPesoPercentuale()+",");
+                                }
+                            }
+                            writer.newLine();
+                        }
+
+                        writer.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     private void modifyEsame(int indice) {
@@ -157,13 +195,13 @@ public class Form {
         });
     }
 
-    private void addEsameComposto(EsameComposto ec, int[] voti, int[] perc) {
-        ArrayList<ProvaParziale> arrListParz = new ArrayList<ProvaParziale>();
-        for(int i = 0; i < N_PARZ; i++) {
-            arrListParz.add(new ProvaParziale(voti[i],perc[i]));
-        }
-        ec.setArrList_parziali(arrListParz);
-        tblmdl.addRow(ec.getDataJtbl());
+    private void addEsameComposto(InserisciCompostoGUI frame) {
+        Object[] obj = frame.getDataJtbl();
+        EsameComposto ec = new EsameComposto(obj,frame);
+        ec.setArrList_parziali(frame.getArrayListParziali());
+        esami.add(ec);
+        tblmdl.addRow(obj);
+        frame.dispose();
     }
 
     private void addEsameSemplice(InserisciSempliceGUI frame) {
@@ -190,36 +228,7 @@ public class Form {
 
     //GETTERS AND SETTERS
 
-    public JButton getBtnAggiungiEsame() {
-        return btnAggiungiEsame;
-    }
-
-    public void setBtnAggiungiEsame(JButton btnAggiungiEsame) {
-        this.btnAggiungiEsame = btnAggiungiEsame;
-    }
-
-    public JComboBox getCmboxTipoEsame() {
-        return cmboxTipoEsame;
-    }
-
-    public void setCmboxTipoEsame(JComboBox cmboxTipoEsame) {
-        this.cmboxTipoEsame = cmboxTipoEsame;
-    }
-
-
-    public JTable getJtbl() {
-        return jtbl;
-    }
-
-    public void setJtbl(JTable jtbl) {
-        this.jtbl = jtbl;
-    }
-
     public JPanel getJpnl() {
         return jpnl;
-    }
-
-    public void setJpnl(JPanel jpnl) {
-        this.jpnl = jpnl;
     }
 }

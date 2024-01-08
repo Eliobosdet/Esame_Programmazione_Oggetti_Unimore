@@ -13,6 +13,9 @@ public class ProvaParziale {
         return votoFinale;
     }
 
+    public int getPesoPercentuale() {
+        return pesoPercentuale;
+    }
     public void setVotoFinale(int votoFinale) {
         this.votoFinale = votoFinale;
     }
@@ -20,7 +23,4 @@ public class ProvaParziale {
         this.pesoPercentuale = pesoPercentuale;
     }
 
-    public int getPesoPercentuale() {
-        return pesoPercentuale;
-    }
 }

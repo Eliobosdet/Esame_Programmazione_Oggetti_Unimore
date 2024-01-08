@@ -1,32 +1,41 @@
 package Esami;
 
+import Grafica.InserisciCompostoGUI;
+
 import java.util.ArrayList;
 
 public class EsameComposto extends AbstractEsame {
-    protected int n_parziali;
-    protected ArrayList<ProvaParziale> arrList_parziali;
+    private int n_parziali;
+    private ArrayList<ProvaParziale> arrList_parziali;
     public EsameComposto(String nomeStudente, String cognomeStudente, String insegnamento, int votoFinale, int crediti, int n_parziali) {
-        super(nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti,"Esame Composto");
+        super(nomeStudente,cognomeStudente,insegnamento,votoFinale,crediti);
         this.n_parziali = n_parziali;
     }
 
     public EsameComposto() {
-        super("Composto");
+        super();
         this.n_parziali=0;
+    }
+
+    public EsameComposto(Object[] obj) {
+        super(String.valueOf(obj[0]),String.valueOf(obj[1]),String.valueOf(obj[2]),Integer.parseInt(String.valueOf(obj[3])),Integer.parseInt(String.valueOf(obj[4])));
+        this.n_parziali = Integer.parseInt(String.valueOf(obj[6]));
+    }
+
+    public EsameComposto(Object[] obj, InserisciCompostoGUI frame) {
+        this(obj);
+        setGui(frame);
+        n_parziali = frame.getParzialiGUI().getNumParziali();
     }
 
     @Override
     public Object[] getDataJtbl() {
-        Object[] obj = {getNomeStudente(),getCognomeStudente(),getInsegnamento(),getVotoFinale(),getCrediti(),"false",getTipoEsame()};
+        Object[] obj = {getNomeStudente(),getCognomeStudente(),getInsegnamento(),getVotoFinale(),getCrediti(),"false",n_parziali};
         return obj;
     }
 
     public int getN_parziali() {
         return n_parziali;
-    }
-
-    public int getCrediti() {
-        return getCrediti();
     }
 
     public ArrayList<ProvaParziale> getArrList_parziali() {

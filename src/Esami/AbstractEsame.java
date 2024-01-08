@@ -13,17 +13,15 @@ public abstract class AbstractEsame
     private InserisciGUI gui;
 
 
-    public AbstractEsame(String nomeStudente, String cognomeStudente, String insegnamento, int votoFinale, int crediti, String tipoEsame) {
+    public AbstractEsame(String nomeStudente, String cognomeStudente, String insegnamento, int votoFinale, int crediti) {
         this.nomeStudente = nomeStudente;
         this.cognomeStudente = cognomeStudente;
         this.insegnamento = insegnamento;
         this.votoFinale = votoFinale;
         this.crediti = crediti;
-        this.tipoEsame = tipoEsame;
     }
 
-    public AbstractEsame(String tipoEsame) {
-        this.tipoEsame = tipoEsame;
+    public AbstractEsame() {
         this.nomeStudente = null;
         this.cognomeStudente = null;
         this.insegnamento = null;
@@ -72,18 +70,8 @@ public abstract class AbstractEsame
     }
 
     @Override
-    public String getTipoEsame() {
-        return tipoEsame;
-    }
-
-    @Override
     public int getCrediti() {
         return crediti;
-    }
-
-    @Override
-    public void setTipoEsame(String tipoEsame) {
-
     }
 
     @Override
