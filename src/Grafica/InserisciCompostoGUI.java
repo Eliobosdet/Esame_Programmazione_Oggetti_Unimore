@@ -45,12 +45,12 @@ public class InserisciCompostoGUI extends InserisciGUI {
         return super.ctrlTextFields() && !txtNumParziali.getText().isEmpty();
     }*/
 
+
+
     @Override
     public void addComponents() {
         super.addComponents();
-        //getJp().add(lblNumParziali); getJp().add(txtNumParziali);
-        getJp().add(getBtnInserisci()); getJp().add(getBtnModifica());
-        getJp().add(btnModificaParziali); getJp().add(getLblError());
+        getJp().add(btnModificaParziali);
     }
 
     /*public boolean ctrlNumParziali() {

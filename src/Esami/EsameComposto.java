@@ -1,6 +1,7 @@
 package Esami;
 
 import Grafica.InserisciCompostoGUI;
+import Grafica.InserisciGUI;
 
 import java.util.ArrayList;
 
@@ -17,13 +18,14 @@ public class EsameComposto extends AbstractEsame {
         this.n_parziali=0;
     }
 
-    public EsameComposto(Object[] obj) {
+    public EsameComposto(Object[] obj, ArrayList<ProvaParziale> arrayList) {
         super(String.valueOf(obj[0]),String.valueOf(obj[1]),String.valueOf(obj[2]),Integer.parseInt(String.valueOf(obj[3])),Integer.parseInt(String.valueOf(obj[4])));
         this.n_parziali = Integer.parseInt(String.valueOf(obj[6]));
+
     }
 
     public EsameComposto(Object[] obj, InserisciCompostoGUI frame) {
-        this(obj);
+        this(obj, frame.getArrayListParziali());
         setGui(frame);
         n_parziali = frame.getParzialiGUI().getNumParziali();
     }
@@ -54,4 +56,8 @@ public class EsameComposto extends AbstractEsame {
         this.arrList_parziali = arrList_parziali;
     }
 
+    @Override
+    public InserisciCompostoGUI getGui() {
+        return (InserisciCompostoGUI) super.getGui();
+    }
 }

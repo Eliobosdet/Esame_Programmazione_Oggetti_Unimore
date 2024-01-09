@@ -54,13 +54,6 @@ public class InserisciSempliceGUI extends InserisciGUI {
         });
     }
 
-    @Override
-    public void addComponents() {
-        super.addComponents();
-        getJp().add(getBtnInserisci()); getJp().add(getBtnModifica());
-        getJp().add(getLblError());
-    }
-
     /* private void initialize() {
             createFrame();
             addComponents();

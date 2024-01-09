@@ -17,7 +17,7 @@ public class Main extends JFrame {
         Form form = new Form();
         JFrame jf = new JFrame("Gestione Esami");
         jf.setContentPane(form.getJpnl());
-        jf.setSize(800,600);
+        jf.setSize(900,900);
         jf.setResizable(false);
         jf.setLocationRelativeTo(null);
         jf.setDefaultCloseOperation(EXIT_ON_CLOSE);

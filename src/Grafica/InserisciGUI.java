@@ -17,7 +17,6 @@ public abstract class InserisciGUI extends MediumFrame{
     private JComponent cmpVotoFinale = new JComponent() {};
     private JTextField txtNumCrediti = new JTextField();
     private JRadioButton rdbtnLode = new JRadioButton();
-    private JLabel lblError = new JLabel("Qualcosa è andato storto,Riprova.");
     private JButton btnInserisci = new JButton("Inserisci");
     private JButton btnModifica = new JButton("Salva");
 
@@ -28,8 +27,6 @@ public abstract class InserisciGUI extends MediumFrame{
     public InserisciGUI(String titolo, GridLayout gl) {
         super(titolo,gl);
         rdbtnLode.setEnabled(false);
-        lblError.setForeground(Color.red);
-        lblError.setVisible(false);
         btnModifica.setEnabled(false);
     }
 
@@ -50,6 +47,7 @@ public abstract class InserisciGUI extends MediumFrame{
         getJp().add(lblVotoFinale);getJp().add(cmpVotoFinale);
         getJp().add(lblNumCrediti);getJp().add(txtNumCrediti);
         getJp().add(lblLode);getJp().add(rdbtnLode);
+        getJp().add(getBtnInserisci()); getJp().add(getBtnModifica());
     }
 
     public boolean ctrlTextFields() {
@@ -85,7 +83,12 @@ public abstract class InserisciGUI extends MediumFrame{
         return true;
     }
 
-
+    public Object[] getDataJtbl() {
+        Object[] obj = {getTxtNome().getText(), getTxtCognome().getText(), getTxtInsegnamento().getText(),
+                Integer.parseInt(String.valueOf(cmpVotoFinale)), getTxtNumCrediti().getText(),
+                getRdbtnLode().isSelected()};
+        return obj;
+    }
 
 
 
@@ -111,10 +114,6 @@ public abstract class InserisciGUI extends MediumFrame{
     public JRadioButton getRdbtnLode() {
         return rdbtnLode;
     }
-
-    public JLabel getLblError() { return lblError; }
-
-    public void setLblError(String s) { this.lblError.setText(s); }
 
     public JButton getBtnInserisci() {
         return btnInserisci;
