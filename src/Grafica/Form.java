@@ -35,6 +35,8 @@ public class Form {
     private File file;
     private ArrayList<Esame> esami = new ArrayList<>(); //Esami memorizzati
 
+    private boolean saved_changes = true;
+
     public Form() {
 
         //Set JTableModel
@@ -68,6 +70,7 @@ public class Form {
                                     System.out.println("Inserimento avvenuto | " + f);
                                     addEsameComposto(f);
                                 }
+                                setSaved_changes(false);
                             }
                         }
                     });
@@ -82,10 +85,12 @@ public class Form {
                             } else {
                                 System.out.println("Inserimento avvenuto | " + f);
                                 addEsameSemplice(f);
+                                setSaved_changes(false);
                             }
                         }
                     });
                 }
+
             }
         });
         btnModificaEsame.addActionListener(new ActionListener() {
@@ -103,6 +108,7 @@ public class Form {
                     return;
                 }
                 modifyEsame(indice);
+                setSaved_changes(false);
             }
         });
         btnEliminaEsame.addActionListener(new ActionListener() {
@@ -115,6 +121,7 @@ public class Form {
                 int indice = jtbl.getSelectedRow();
                 tblmdl.removeRow(indice);
                 esami.remove(indice);
+                setSaved_changes(false);
             }
         });
         btnSalva.addActionListener(new ActionListener() {
@@ -132,6 +139,8 @@ public class Form {
     }
 
     private void loadTableFromFile() {
+        if(!saved_changes && askToSave() == JOptionPane.YES_OPTION)
+            saveTableOnFile();
         if (jFileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             file = new File(jFileChooser.getSelectedFile().getAbsolutePath());
             try {
@@ -167,6 +176,7 @@ public class Form {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            setSaved_changes(true);
         }
     }
     private void fillTableModel() {
@@ -237,7 +247,7 @@ public class Form {
         frame.dispose();
     }
 
-    private void writeExams(BufferedWriter writer) {
+    public void writeExams(BufferedWriter writer) {
         try {
             for (Esame e: esami) {
                 System.out.println(e.getDataJtbl().toString());
@@ -264,7 +274,9 @@ public class Form {
             e.printStackTrace();
         }
     }
-    private boolean saveTableOnFile() {
+    public boolean saveTableOnFile() {
+        if(tblmdl.getRowCount()==0)
+            return false;
         if (jFileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 
             int response = JOptionPane.NO_OPTION;
@@ -286,13 +298,26 @@ public class Form {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            setSaved_changes(true);
         }
         return true;
+    }
+
+    public int askToSave() {
+        return JOptionPane.showOptionDialog(null,"Vuoi prima salvare le modifiche?","Salvataggio",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
     }
 
     //GETTERS AND SETTERS
 
     public JPanel getJpnl() {
         return jpnl;
+    }
+
+    public void setSaved_changes(boolean saved_changes) {
+        this.saved_changes = saved_changes;
+    }
+
+    public boolean isSaved_changes() {
+        return saved_changes;
     }
 }
