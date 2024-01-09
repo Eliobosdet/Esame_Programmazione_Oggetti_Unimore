@@ -120,58 +120,57 @@ public class Form {
         btnSalva.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                saveTableOnFile();
+                System.out.println(saveTableOnFile());
             }
         });
         btnCarica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (jFileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    file = new File(jFileChooser.getSelectedFile().getAbsolutePath());
-                    try {
-                        BufferedReader reader = new BufferedReader(new FileReader(file));
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            String[] values = line.split(",");
-                            Object[] obj = new Object[7];
-                            Esame e;
-
-                            for(int i = 0; i < 7; i++) {
-                                obj[i] = values[i];
-                            }
-
-                            if (values.length > 7) {    //se Esame composto
-                                System.out.println("Esame composto");
-                                ArrayList<ProvaParziale> arrayList = new ArrayList<>();
-                                int nParz = Integer.parseInt(values[6]);
-                                for(int i = 7; i < 7+(nParz*2); i+=2) {
-                                    int voto = Integer.parseInt(values[i]);
-                                    int perc = Integer.parseInt(values[i+1]);
-                                    arrayList.add(new ProvaParziale(voto,perc));
-                                }
-                                e = new EsameComposto(obj,arrayList);
-
-                            } else {
-                                e = new EsameSemplice(obj);
-                            }
-                            esami.add(e);
-                        }
-                        fillTableModel();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                loadTableFromFile();
             }
         });
     }
 
+    private void loadTableFromFile() {
+        if (jFileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            file = new File(jFileChooser.getSelectedFile().getAbsolutePath());
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                String line;
+                esami.clear();
+                while ((line = reader.readLine()) != null) {
+                    String[] values = line.split(",");
+                    Object[] obj = new Object[7];
+                    Esame e;
 
-    private void fillTableModel() {
-        System.out.println(tblmdl.getRowCount());
-        for(int i = 0; i < tblmdl.getRowCount(); ) {
-            System.out.println(i);
-            tblmdl.removeRow(i);
+                    for(int i = 0; i < 7; i++) {
+                        obj[i] = values[i];
+                    }
+
+                    if (values.length > 7) {    //se Esame composto
+                        System.out.println("Esame composto");
+                        ArrayList<ProvaParziale> arrayList = new ArrayList<>();
+                        int nParz = Integer.parseInt(values[6]);
+                        for(int i = 7; i < 7+(nParz*2); i+=2) {
+                            int voto = Integer.parseInt(values[i]);
+                            int perc = Integer.parseInt(values[i+1]);
+                            arrayList.add(new ProvaParziale(voto,perc));
+                        }
+                        e = new EsameComposto(obj,arrayList);
+
+                    } else {
+                        e = new EsameSemplice(obj);
+                    }
+                    esami.add(e);
+                }
+                fillTableModel();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+    }
+    private void fillTableModel() {
+        tblmdl.setRowCount(0);  //pulisce la tabella prima dell'inserimento
         for (Esame e : esami) {
             Object[] obj = new Object[7];
             if (e instanceof EsameSemplice es)
@@ -182,7 +181,6 @@ public class Form {
             tblmdl.addRow(obj);
         }
     }
-
 
     private void modifyEsame(int indice) {
         InserisciGUI f;
@@ -239,7 +237,6 @@ public class Form {
         frame.dispose();
     }
 
-
     private void writeExams(BufferedWriter writer) {
         try {
             for (Esame e: esami) {
@@ -267,9 +264,20 @@ public class Form {
             e.printStackTrace();
         }
     }
-    private void saveTableOnFile() {
+    private boolean saveTableOnFile() {
         if (jFileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+
+            int response = JOptionPane.NO_OPTION;
+            if(jFileChooser.getSelectedFile().exists()) {
+                System.out.println("Esiste");
+                response = JOptionPane.showOptionDialog(null,"Vuoi sovrascrivere il file su cui salvare i dati?","Conferma",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
+                if(response != JOptionPane.YES_OPTION) {
+                    return false;
+                }
+            }
+
             file = new File(jFileChooser.getSelectedFile().getAbsolutePath());
+
             try {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file, false));
                 writeExams(writer);
@@ -279,6 +287,7 @@ public class Form {
                 e.printStackTrace();
             }
         }
+        return true;
     }
 
     //GETTERS AND SETTERS

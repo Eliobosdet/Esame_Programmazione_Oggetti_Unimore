@@ -1,8 +1,9 @@
-package Grafica;
+package Main;
 
 import Esami.AbstractEsame;
 import Esami.Esame;
 import Esami.EsameSemplice;
+import Grafica.Form;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -17,7 +18,7 @@ public class Main extends JFrame {
         Form form = new Form();
         JFrame jf = new JFrame("Gestione Esami");
         jf.setContentPane(form.getJpnl());
-        jf.setSize(900,900);
+        jf.setSize(900,700);
         jf.setResizable(false);
         jf.setLocationRelativeTo(null);
         jf.setDefaultCloseOperation(EXIT_ON_CLOSE);
