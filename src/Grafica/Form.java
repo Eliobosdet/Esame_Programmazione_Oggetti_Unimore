@@ -3,7 +3,10 @@ package Grafica;
 import Esami.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -122,6 +125,38 @@ public class Form {
                 tblmdl.removeRow(indice);
                 esami.remove(indice);
                 setSaved_changes(false);
+            }
+        });
+        jtbl.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int selectedRow = jtbl.getSelectedRow();
+                    System.out.println("Selected Row: " + selectedRow);
+                    if(esami.get(selectedRow) instanceof EsameSemplice)
+                        btnMostraParziali.setEnabled(false);
+                    else
+                        btnMostraParziali.setEnabled(true);
+
+                }
+            }
+        });
+        btnMostraParziali.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EsameComposto ec = (EsameComposto) esami.get(jtbl.getSelectedRow());
+                MediumFrame medFrame = new MediumFrame("Esami Parziali",new GridLayout(ec.getN_parziali()+1,3));
+                JPanel jp = medFrame.getJp();
+                jp.add(medFrame.createCenteredLabel("Numero parziale"));
+                jp.add(medFrame.createCenteredLabel("Voto parziale(0-30)"));
+                jp.add(medFrame.createCenteredLabel("Percentuale parziale(%)"));
+                int i_parziale = 0;
+                for (ProvaParziale pp: ec.getArrList_parziali()) {
+                    jp.add(medFrame.createCenteredLabel(""+i_parziale));
+                    jp.add(medFrame.createCenteredLabel(""+pp.getVotoFinale()));
+                    jp.add(medFrame.createCenteredLabel(""+pp.getPesoPercentuale()));
+                    i_parziale++;
+                }
             }
         });
         btnSalva.addActionListener(new ActionListener() {
@@ -272,6 +307,14 @@ public class Form {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     public boolean saveTableOnFile() {
@@ -293,7 +336,6 @@ public class Form {
             try {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file, false));
                 writeExams(writer);
-                writer.close();
                 System.out.println("Scrittura nel file avvenuta con successo!");
             } catch (IOException e) {
                 e.printStackTrace();

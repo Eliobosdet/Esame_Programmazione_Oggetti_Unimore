@@ -32,13 +32,18 @@ public class SalvataggioAutomatico extends Thread {
     @Override
     public void run() {
         while (true) {
-            System.out.println("Thread: Salvo su file "+FILE_PATH+"/"+FILE_NAME);
-            form.writeExams(writer);
-            try {
-                sleep(30000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if(!form.isSaved_changes()) {
+                System.out.println("Thread: Salvo su file "+FILE_PATH+"/"+FILE_NAME);
+                try {
+                    writer = new BufferedWriter(new FileWriter(file, false));
+                    form.writeExams(writer);
+                } catch (IOException e) {e.printStackTrace();}
+            } else {
+                System.out.println("Thread: Nessuna modifica recente, non salvo");
             }
+            try {
+                sleep(60000);
+            } catch (InterruptedException e) {e.printStackTrace();}
         }
     }
 }

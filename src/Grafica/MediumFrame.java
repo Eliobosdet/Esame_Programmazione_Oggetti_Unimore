@@ -8,21 +8,30 @@ public class MediumFrame extends JFrame{
 
     public MediumFrame(String titolo, GridLayout gl) {
         jp = new JPanel(gl);
-        setTitle(titolo);
+        jp.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(jp);
-        setSize(400,400);
+        setFrame(titolo);
+    }
+
+    public MediumFrame(String titolo) {
+        jp = new JPanel();
+        jp.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        add(jp);
+        setFrame(titolo);
+    }
+
+
+    public MediumFrame(){
+        this("Medium Frame");
+    }
+
+    public void setFrame(String titolo) {
+        setTitle(titolo);
+        setSize(500,500);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setVisible(true);
-    }
-
-    public MediumFrame(String titolo) {
-        this(titolo,new GridLayout(6,2));
-    }
-
-    public MediumFrame(){
-        this("Medium Frame");
     }
 
     public JPanel getJp() {
@@ -31,5 +40,11 @@ public class MediumFrame extends JFrame{
 
     public void setJp(JPanel jp) {
         this.jp = jp;
+    }
+
+    public JLabel createCenteredLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setHorizontalAlignment(JLabel.CENTER);
+        return label;
     }
 }

@@ -106,22 +106,19 @@ public class InserisciParzialiGUI extends JFrame{
         setCmbxNumParziali();
         jp1.add(cmbxNumParziali, BorderLayout.CENTER);
     }
-
-    private void loadJp2() {
+    public void loadJp2() {
         jp2.setLayout(new GridLayout(1,3));
         jp2.setMaximumSize(new Dimension(800,200));
         jp2.add(new JLabel("Numero parziale"));
         jp2.add(new JLabel("Voto parziale(0-30)"));
         jp2.add(new JLabel("Percentuale parziale(%)"));
     }
-
-    private void loadJp3() {
+    public void loadJp3() {
         jp3.setLayout(gl);
         jp3.setMaximumSize(new Dimension(800,1080));
         createComponents();
         addComponents();
     }
-
     private void loadJp4() {
         jp4.setLayout(new BorderLayout());
         jp4.add(btnSalva,BorderLayout.CENTER);
@@ -138,7 +135,6 @@ public class InserisciParzialiGUI extends JFrame{
         }
         return med / 100;
     }
-
     public void readPartials() {
         partials.clear();
         for(int i = 1; i < numParziali*3; i+=2) {
@@ -152,7 +148,6 @@ public class InserisciParzialiGUI extends JFrame{
             partials.add(new ProvaParziale(voto,perc));
         }
     }
-
     public boolean ctrlPerc() {
         int sum = 0;
         for(int i = 2; i < numParziali*3; i+=3) {
@@ -174,7 +169,6 @@ public class InserisciParzialiGUI extends JFrame{
         }
         System.out.println(components);
     }
-
     private void addComponents() {
         gl = new GridLayout(numParziali,3);
         for (JComponent jc: components) {
@@ -195,7 +189,6 @@ public class InserisciParzialiGUI extends JFrame{
             v.add(i);
         return v;
     }
-
     private Vector<Integer> getVectorPerc() {
         Vector<Integer> v = new Vector<>();
         for (int i = 0; i < 101; i++)
@@ -209,6 +202,10 @@ public class InserisciParzialiGUI extends JFrame{
 
     public JButton getBtnSalva() {
         return btnSalva;
+    }
+
+    public JPanel getJp2() {
+        return jp2;
     }
 
     public JPanel getJp3() {

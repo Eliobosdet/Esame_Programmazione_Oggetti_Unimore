@@ -21,7 +21,7 @@ public class EsameComposto extends AbstractEsame {
     public EsameComposto(Object[] obj, ArrayList<ProvaParziale> arrayList) {
         super(String.valueOf(obj[0]),String.valueOf(obj[1]),String.valueOf(obj[2]),Integer.parseInt(String.valueOf(obj[3])),Integer.parseInt(String.valueOf(obj[4])));
         this.n_parziali = Integer.parseInt(String.valueOf(obj[6]));
-
+        this.arrList_parziali = arrayList;
     }
 
     public EsameComposto(Object[] obj, InserisciCompostoGUI frame) {

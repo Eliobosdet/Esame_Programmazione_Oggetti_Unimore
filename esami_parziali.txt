@@ -1,0 +1,3 @@
+Elio,Corradini,Analisi matematica,22,9,false,2,20,50,25,50,
+Elio,Corradini,Algebra lineare,18,9,false,2,18,50,18,50,
+Elio,Corradini,Programmazione I,25,9,false,2,23,30,27,70,
