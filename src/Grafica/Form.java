@@ -3,6 +3,8 @@ package Grafica;
 import Esami.*;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.*;
@@ -23,6 +25,8 @@ public class Form {
     private JButton btnMostraParziali;
     private JButton btnSalva;
     private JButton btnCarica;
+    private JTextField txtFiltra;
+    private JButton btnFiltra;
 
     //COMPONENTI LOGICI
     DefaultTableModel tblmdl = new DefaultTableModel() {
@@ -37,6 +41,7 @@ public class Form {
     private JFileChooser jFileChooser = new JFileChooser();
     private File file;
     private ArrayList<Esame> esami = new ArrayList<>(); //Esami memorizzati
+    private ArrayList<Esame> esamiTable = new ArrayList<>(); //Esami attualmente sulla jtbl
 
     private boolean saved_changes = true;
 
@@ -171,60 +176,45 @@ public class Form {
                 loadTableFromFile();
             }
         });
+        txtFiltra.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateTableFilter();
+                System.out.println("insertUpdate");
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if(txtFiltra.getText().isBlank())
+                    fillTableModel(esami);
+                else
+                    updateTableFilter();
+                System.out.println("removeUpdate");
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {}
+        });
+
     }
 
-    private void loadTableFromFile() {
-        if(!saved_changes && askToSave() == JOptionPane.YES_OPTION)
-            saveTableOnFile();
-        if (jFileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-            file = new File(jFileChooser.getSelectedFile().getAbsolutePath());
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(file));
-                String line;
-                esami.clear();
-                while ((line = reader.readLine()) != null) {
-                    String[] values = line.split(",");
-                    Object[] obj = new Object[7];
-                    Esame e;
-
-                    for(int i = 0; i < 7; i++) {
-                        obj[i] = values[i];
-                    }
-
-                    if (values.length > 7) {    //se Esame composto
-                        System.out.println("Esame composto");
-                        ArrayList<ProvaParziale> arrayList = new ArrayList<>();
-                        int nParz = Integer.parseInt(values[6]);
-                        for(int i = 7; i < 7+(nParz*2); i+=2) {
-                            int voto = Integer.parseInt(values[i]);
-                            int perc = Integer.parseInt(values[i+1]);
-                            arrayList.add(new ProvaParziale(voto,perc));
-                        }
-                        e = new EsameComposto(obj,arrayList);
-
-                    } else {
-                        e = new EsameSemplice(obj);
-                    }
-                    esami.add(e);
-                }
-                fillTableModel();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            setSaved_changes(true);
-        }
+    private void addEsameSemplice(InserisciSempliceGUI frame) {
+        Object[] obj = frame.getDataJtbl();
+        EsameSemplice es = new EsameSemplice(obj,frame);
+        if(txtFiltra.getText().isBlank())
+        txtFiltra.setText("");
+        esami.add(es);
+        //System.out.println(esami);
+        tblmdl.addRow(obj);
+        frame.dispose();
     }
-    private void fillTableModel() {
-        tblmdl.setRowCount(0);  //pulisce la tabella prima dell'inserimento
-        for (Esame e : esami) {
-            Object[] obj = new Object[7];
-            if (e instanceof EsameSemplice es)
-                obj = es.getDataJtbl();
-            else if (e instanceof EsameComposto ec) {
-                obj = ec.getDataJtbl();
-            }
-            tblmdl.addRow(obj);
-        }
+    private void addEsameComposto(InserisciCompostoGUI frame) {
+        Object[] obj = frame.getDataJtbl();
+        EsameComposto ec = new EsameComposto(obj,frame);
+        ec.setArrList_parziali(frame.getArrayListParziali());
+        esami.add(ec);
+        tblmdl.addRow(obj);
+        frame.dispose();
     }
 
     private void modifyEsame(int indice) {
@@ -263,23 +253,6 @@ public class Form {
         for (int i = 0; i < obj.length; i++)
             tblmdl.setValueAt(obj[i],row,i);
         f.dispose();
-    }
-
-    private void addEsameSemplice(InserisciSempliceGUI frame) {
-        Object[] obj = frame.getDataJtbl();
-        EsameSemplice es = new EsameSemplice(obj,frame);
-        esami.add(es);
-        //System.out.println(esami);
-        tblmdl.addRow(obj);
-        frame.dispose();
-    }
-    private void addEsameComposto(InserisciCompostoGUI frame) {
-        Object[] obj = frame.getDataJtbl();
-        EsameComposto ec = new EsameComposto(obj,frame);
-        ec.setArrList_parziali(frame.getArrayListParziali());
-        esami.add(ec);
-        tblmdl.addRow(obj);
-        frame.dispose();
     }
 
     public void writeExams(BufferedWriter writer) {
@@ -343,6 +316,76 @@ public class Form {
             setSaved_changes(true);
         }
         return true;
+    }
+
+    private void fillTableModel(ArrayList<Esame> esamiTabella) {
+        tblmdl.setRowCount(0);  //pulisce la tabella prima dell'inserimento
+        for (Esame e : esamiTabella) {
+            Object[] obj = new Object[7];
+            if (e instanceof EsameSemplice es)
+                obj = es.getDataJtbl();
+            else if (e instanceof EsameComposto ec) {
+                obj = ec.getDataJtbl();
+            }
+            tblmdl.addRow(obj);
+        }
+    }
+    private void loadTableFromFile() {
+        if(!saved_changes && askToSave() == JOptionPane.YES_OPTION)
+            saveTableOnFile();
+        if (jFileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            file = new File(jFileChooser.getSelectedFile().getAbsolutePath());
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                String line;
+                esami.clear();
+                while ((line = reader.readLine()) != null) {
+                    String[] values = line.split(",");
+                    Object[] obj = new Object[7];
+                    Esame e;
+
+                    for(int i = 0; i < 7; i++) {
+                        obj[i] = values[i];
+                    }
+
+                    if (values.length > 7) {    //se Esame composto
+                        System.out.println("Esame composto");
+                        ArrayList<ProvaParziale> arrayList = new ArrayList<>();
+                        int nParz = Integer.parseInt(values[6]);
+                        for(int i = 7; i < 7+(nParz*2); i+=2) {
+                            int voto = Integer.parseInt(values[i]);
+                            int perc = Integer.parseInt(values[i+1]);
+                            arrayList.add(new ProvaParziale(voto,perc));
+                        }
+                        e = new EsameComposto(obj,arrayList);
+
+                    } else {
+                        e = new EsameSemplice(obj);
+                    }
+                    esami.add(e);
+                }
+                fillTableModel(esami);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            setSaved_changes(true);
+        }
+    }
+
+    private void updateTableFilter() {
+        String filterText = txtFiltra.getText().toLowerCase();
+        tblmdl.setRowCount(0);
+        ArrayList<Esame> esamiMatchati = new ArrayList<>();
+        for (Esame esame : esami) {
+            Object[] obj = esame.getDataJtbl();
+            String nomeCognome = String.valueOf(obj[0]) + String.valueOf(obj[1]);
+            String insegnamento = String.valueOf(obj[2]);
+            if (nomeCognome.toLowerCase().replace("\\s+","").contains(filterText.replace("\\s+",""))
+                    || insegnamento.toLowerCase().replace("\\s+","").contains(filterText.replace("\\s+","")))
+                esamiMatchati.add(esame);
+        }
+        esamiTable = esamiMatchati;
+        fillTableModel(esamiMatchati);
     }
 
     public int askToSave() {
