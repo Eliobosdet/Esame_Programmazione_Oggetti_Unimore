@@ -4,6 +4,7 @@ import Esami.AbstractEsame;
 import Esami.Esame;
 import Esami.EsameSemplice;
 import Grafica.Form;
+import Threads.AggiornaListTabella;
 import Threads.SalvataggioAutomatico;
 
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class Main extends JFrame {
         JFrame jf = new JFrame("Gestione Esami");
 
         SalvataggioAutomatico threadSalvataggio = new SalvataggioAutomatico(form);
+        AggiornaListTabella threadAggiornaLista = new AggiornaListTabella(form);
 
         jf.setContentPane(form.getJpnl());
         jf.setSize(900,700);
@@ -31,6 +33,7 @@ public class Main extends JFrame {
         jf.setVisible(true);
 
         threadSalvataggio.start();
+        threadAggiornaLista.start();
 
         jf.addWindowListener(new WindowAdapter() {
             @Override

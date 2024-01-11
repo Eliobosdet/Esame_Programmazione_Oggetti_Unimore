@@ -8,5 +8,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="xchart-3.8.7" level="project" />
+    <orderEntry type="library" name="xchart-demo-3.8.7" level="project" />
   </component>
 </module>

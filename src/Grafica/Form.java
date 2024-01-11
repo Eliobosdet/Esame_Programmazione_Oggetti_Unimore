@@ -12,7 +12,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+
 import java.util.ArrayList;
+import org.knowm.xchart.SwingWrapper;
 
 public class Form {
     //COMPONENTI GRAFICI
@@ -41,7 +43,8 @@ public class Form {
     private JFileChooser jFileChooser = new JFileChooser();
     private File file;
     private ArrayList<Esame> esami = new ArrayList<>(); //Esami memorizzati
-    private ArrayList<Esame> esamiTable = new ArrayList<>(); //Esami attualmente sulla jtbl
+    private ArrayList<Esame> esamiTable = esami; //Esami attualmente sulla jtbl
+    private GraficoBarre graficoBarre;
 
     private boolean saved_changes = true;
 
@@ -116,7 +119,7 @@ public class Form {
                     return;
                 }
                 modifyEsame(indice);
-                setSaved_changes(false);
+
             }
         });
         btnEliminaEsame.addActionListener(new ActionListener() {
@@ -127,9 +130,9 @@ public class Form {
                     return;
                 }
                 int indice = jtbl.getSelectedRow();
+                esamiTable.remove(indice);
                 tblmdl.removeRow(indice);
-                esami.remove(indice);
-                setSaved_changes(false);
+                setSaved_changes(tblmdl.getRowCount()==0);
             }
         });
         jtbl.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -137,11 +140,13 @@ public class Form {
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
                     int selectedRow = jtbl.getSelectedRow();
-                    System.out.println("Selected Row: " + selectedRow);
-                    if(esami.get(selectedRow) instanceof EsameSemplice)
-                        btnMostraParziali.setEnabled(false);
-                    else
-                        btnMostraParziali.setEnabled(true);
+                    if(selectedRow!=-1) {
+                        System.out.println("Selected Row: " + selectedRow);
+                        if(esamiTable.get(selectedRow) instanceof EsameSemplice)
+                            btnMostraParziali.setEnabled(false);
+                        else
+                            btnMostraParziali.setEnabled(true);
+                    }
 
                 }
             }
@@ -179,21 +184,37 @@ public class Form {
         txtFiltra.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
+                //System.out.println("insertUpdate");
                 updateTableFilter();
-                System.out.println("insertUpdate");
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
+                //System.out.println("removeUpdate");
                 if(txtFiltra.getText().isBlank())
                     fillTableModel(esami);
                 else
                     updateTableFilter();
-                System.out.println("removeUpdate");
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {}
+        });
+        btnFiltra.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generaGrafico();
+            }
+        });
+    }
+
+    private void generaGrafico() {
+        GraficoBarre graficoBarre = new GraficoBarre(esami);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new SwingWrapper<>(graficoBarre.getCategoryChart()).displayChart();
+            }
         });
 
     }
@@ -218,11 +239,14 @@ public class Form {
     }
 
     private void modifyEsame(int indice) {
+        if(esamiTable.get(indice).getGui()==null)
+            //creare il frame e popolarlo
+
         InserisciGUI f;
-        if(esami.get(indice) instanceof EsameSemplice es) {
+        if(esamiTable.get(indice) instanceof EsameSemplice es) {
             f = es.getGui();
         } else {
-            EsameComposto ec = (EsameComposto) esami.get(indice);
+            EsameComposto ec = (EsameComposto) esamiTable.get(indice);
             f = ec.getGui();
         }
         //int finalIndice = indice;
@@ -239,16 +263,17 @@ public class Form {
                 }
             }
         });
+        setSaved_changes(false);
     }
     private void resetValuesEsame(InserisciGUI f, int row) {
-        Esame e = esami.get(row);
+        Esame e = esamiTable.get(row);
         Object[] obj = f.getDataJtbl();
         if(f instanceof InserisciSempliceGUI)
             e = new EsameSemplice(obj,(InserisciSempliceGUI) f);
         else
             e = new EsameComposto(obj, (InserisciCompostoGUI) f);
 
-        esami.set(row,e);
+        esamiTable.set(row,e);
 
         for (int i = 0; i < obj.length; i++)
             tblmdl.setValueAt(obj[i],row,i);
@@ -373,15 +398,15 @@ public class Form {
     }
 
     private void updateTableFilter() {
-        String filterText = txtFiltra.getText().toLowerCase();
+        String filterText = txtFiltra.getText().toLowerCase().replaceAll("\\s", "");
         tblmdl.setRowCount(0);
         ArrayList<Esame> esamiMatchati = new ArrayList<>();
         for (Esame esame : esami) {
             Object[] obj = esame.getDataJtbl();
             String nomeCognome = String.valueOf(obj[0]) + String.valueOf(obj[1]);
-            String insegnamento = String.valueOf(obj[2]);
-            if (nomeCognome.toLowerCase().replace("\\s+","").contains(filterText.replace("\\s+",""))
-                    || insegnamento.toLowerCase().replace("\\s+","").contains(filterText.replace("\\s+","")))
+            String insegnamento = String.valueOf(obj[2]).replaceAll("\\s", "");
+            //System.out.println("nomeCognome: "+nomeCognome+", insegnamento: "+insegnamento+", filterText: "+filterText);
+            if (nomeCognome.toLowerCase().contains(filterText) || insegnamento.toLowerCase().contains(filterText))
                 esamiMatchati.add(esame);
         }
         esamiTable = esamiMatchati;
@@ -404,5 +429,13 @@ public class Form {
 
     public boolean isSaved_changes() {
         return saved_changes;
+    }
+
+    public ArrayList<Esame> getEsami() {
+        return esami;
+    }
+
+    public void setEsamiTable(ArrayList<Esame> esamiTable) {
+        this.esamiTable = esamiTable;
     }
 }
