@@ -34,15 +34,6 @@ public abstract class AbstractEsame
     }
 
 
-
-
-
-
-
-
-
-
-
     @Override
     public Object[] getDataJtbl() {
         Object[] obj = {nomeStudente, cognomeStudente, insegnamento, votoFinale, crediti, tipoEsame};

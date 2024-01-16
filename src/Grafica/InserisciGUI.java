@@ -84,13 +84,24 @@ public abstract class InserisciGUI extends MediumFrame{
     }
 
     public Object[] getDataJtbl() {
-        Object[] obj = {getTxtNome().getText(), getTxtCognome().getText(), getTxtInsegnamento().getText(),
+        Object[] obj = {removeTrailingSpaces(getTxtNome().getText()), removeTrailingSpaces(getTxtCognome().getText()), removeTrailingSpaces(getTxtInsegnamento().getText()),
                 Integer.parseInt(String.valueOf(cmpVotoFinale)), getTxtNumCrediti().getText(),
                 getRdbtnLode().isSelected()};
         return obj;
     }
 
+    public String removeTrailingSpaces(String input) {
+        int length = input.length();
 
+        // Trova l'indice del primo carattere non spazio da destra
+        int endIndex = length - 1;
+        while (endIndex >= 0 && Character.isWhitespace(input.charAt(endIndex))) {
+            endIndex--;
+        }
+
+        // Estrai la sottostringa senza spazi alla fine
+        return input.substring(0, endIndex + 1);
+    }
 
 
     //GETTER E SETTER

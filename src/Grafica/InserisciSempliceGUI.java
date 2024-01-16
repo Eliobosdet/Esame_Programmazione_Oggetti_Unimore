@@ -54,27 +54,12 @@ public class InserisciSempliceGUI extends InserisciGUI {
         });
     }
 
-    /* private void initialize() {
-            createFrame();
-            addComponents();
-
-            jf.add(jp);
-            jf.setVisible(true);
-        }*/
-
     public Object[] getDataJtbl() {
-        Object[] obj = {getTxtNome().getText(), getTxtCognome().getText(), getTxtInsegnamento().getText(),
+        Object[] obj = {removeTrailingSpaces(getTxtNome().getText()), removeTrailingSpaces(getTxtCognome().getText()), removeTrailingSpaces(getTxtInsegnamento().getText()),
                 Integer.parseInt(String.valueOf(cmbxVotoFinale.getSelectedIndex()+18)), getTxtNumCrediti().getText(),
                 getRdbtnLode().isSelected(),"0"};
         return obj;
     }
-
-
-
-
-
-
-
 
     @Override
     public String toString() {

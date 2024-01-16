@@ -14,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.io.*;
 
 import java.util.ArrayList;
-import org.knowm.xchart.SwingWrapper;
 
 public class Form {
     //COMPONENTI GRAFICI
@@ -209,14 +208,10 @@ public class Form {
     }
 
     private void generaGrafico() {
-        GraficoBarre graficoBarre = new GraficoBarre(esami);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new SwingWrapper<>(graficoBarre.getCategoryChart()).displayChart();
-            }
-        });
-
+        if(graficoBarre == null)
+            graficoBarre = new GraficoBarre(esami);
+        else
+            graficoBarre.getjFrame().setVisible(true);
     }
 
     private void addEsameSemplice(InserisciSempliceGUI frame) {
@@ -239,7 +234,7 @@ public class Form {
     }
 
     private void modifyEsame(int indice) {
-        if(esamiTable.get(indice).getGui()==null)
+        //if(esamiTable.get(indice).getGui()==null)
             //creare il frame e popolarlo
 
         InserisciGUI f;

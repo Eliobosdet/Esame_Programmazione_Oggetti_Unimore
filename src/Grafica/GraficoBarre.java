@@ -1,43 +1,91 @@
 package Grafica;
 
 import Esami.Esame;
-import org.knowm.xchart.CategoryChart;
-import org.knowm.xchart.CategoryChartBuilder;
-import org.knowm.xchart.style.Styler.LegendPosition;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class GraficoBarre {
 
-    private CategoryChart chart;
+    private JFreeChart chart;
+    JFrame jFrame;
 
     public GraficoBarre(ArrayList<Esame> esami) {
-        // Creare un nuovo CategoryChartBuilder
-        CategoryChartBuilder chartBuilder = new CategoryChartBuilder();
-        chartBuilder.width(800).height(600).title("Grafico Esami").xAxisTitle("Esame").yAxisTitle("Voto");
+        // Creare il dataset
+        CategoryDataset dataset = createDataset(esami);
 
-        // Ottenere l'istanza di CategoryChart
-        chart = chartBuilder.build();
+        // Creare il CategoryChart
+        chart = createChart(dataset);
 
-        // Impostare lo stile direttamente sulla CategoryChart
-        chart.getStyler().setLegendPosition(LegendPosition.InsideNW);
+        // Creare il pannello del grafico
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setPreferredSize(new Dimension(600, 400));
 
-        // Esempio: Aggiungi serie al grafico
-        ArrayList<String> nomiEsami = new ArrayList<>();
-        ArrayList<Integer> votiEsami = new ArrayList<>();
+        // Creare il frame e aggiungere il pannello del grafico
+        if(jFrame == null)
+            setFrame(chartPanel);
+        else
+            jFrame.getContentPane().add(chartPanel, BorderLayout.CENTER);
+    }
 
-        for (Esame esame : esami) {
-            String s = esame.getNomeStudente() + " " + esame.getCognomeStudente() + " " + esame.getInsegnamento();
-            nomiEsami.add(s);
-            votiEsami.add(esame.getVotoFinale());
-        }
-
-        // Aggiungi la serie direttamente sulla CategoryChart
-        chart.addSeries("Voto Esame", nomiEsami, votiEsami);
+    private void setFrame(ChartPanel chartPanel) {
+        jFrame = new JFrame("Grafico a Barre");
+        jFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        jFrame.getContentPane().add(chartPanel, BorderLayout.CENTER);
+        jFrame.pack();
+        jFrame.setLocationRelativeTo(null);
+        jFrame.setVisible(true);
     }
 
     // Metodo per ottenere il CategoryChart creato
-    public CategoryChart getCategoryChart() {
+    public JFreeChart getChart() {
         return chart;
+    }
+
+    // Metodo per creare il CategoryDataset a partire dagli esami
+    private CategoryDataset createDataset(ArrayList<Esame> esami) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        for (Esame esame : esami) {
+            String nomeStudente = esame.getNomeStudente() + " " + esame.getCognomeStudente();
+            String insegnamento = esame.getInsegnamento();
+            int votoFinale = esame.getVotoFinale();
+
+            dataset.addValue(votoFinale, nomeStudente, insegnamento);
+        }
+
+        return dataset;
+    }
+
+    // Metodo per creare il CategoryChart
+    private JFreeChart createChart(CategoryDataset dataset) {
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "Grafico Voti Esami", // Titolo del grafico
+                "Insegnamento",       // Etichetta asse x
+                "Voto Finale",        // Etichetta asse y
+                dataset);             // Dataset
+
+        CategoryPlot plot = (CategoryPlot) barChart.getPlot();
+        CategoryAxis xAxis = plot.getDomainAxis();
+        xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45); // Rotazione etichette asse x per maggiore leggibilità
+
+        NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
+        yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+
+        return barChart;
+    }
+
+    public JFrame getjFrame() {
+        return jFrame;
     }
 }
