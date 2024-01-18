@@ -208,8 +208,9 @@ public class Form {
     }
 
     private void generaGrafico() {
+        System.out.println("Esami tabella: "+esamiTable);
         if(graficoBarre == null)
-            graficoBarre = new GraficoBarre(esami);
+            graficoBarre = new GraficoBarre(esamiTable);
         else
             graficoBarre.getjFrame().setVisible(true);
     }
@@ -234,16 +235,22 @@ public class Form {
     }
 
     private void modifyEsame(int indice) {
-        //if(esamiTable.get(indice).getGui()==null)
-            //creare il frame e popolarlo
-
         InserisciGUI f;
-        if(esamiTable.get(indice) instanceof EsameSemplice es) {
-            f = es.getGui();
+        Esame e = esamiTable.get(indice);
+
+        if(e instanceof EsameSemplice es) {
+            if(e.getGui()==null)
+                es.setGui(new InserisciSempliceGUI(es.getDataJtbl()));
+            else
+                f = es.getGui();
         } else {
-            EsameComposto ec = (EsameComposto) esamiTable.get(indice);
-            f = ec.getGui();
+            EsameComposto ec = (EsameComposto) e;
+            if(e.getGui()==null)
+
+            else
+                f = ec.getGui();
         }
+
         //int finalIndice = indice;
         f.reopen();
         f.getBtnModifica().addActionListener(new ActionListener() {
@@ -338,9 +345,10 @@ public class Form {
         return true;
     }
 
-    private void fillTableModel(ArrayList<Esame> esamiTabella) {
+    private void fillTableModel(ArrayList<Esame> esTab) {
         tblmdl.setRowCount(0);  //pulisce la tabella prima dell'inserimento
-        for (Esame e : esamiTabella) {
+        esamiTable = esTab;
+        for (Esame e : esTab) {
             Object[] obj = new Object[7];
             if (e instanceof EsameSemplice es)
                 obj = es.getDataJtbl();
@@ -369,7 +377,7 @@ public class Form {
                     }
 
                     if (values.length > 7) {    //se Esame composto
-                        System.out.println("Esame composto");
+                        System.out.println("Carico da file Esame composto");
                         ArrayList<ProvaParziale> arrayList = new ArrayList<>();
                         int nParz = Integer.parseInt(values[6]);
                         for(int i = 7; i < 7+(nParz*2); i+=2) {
@@ -404,7 +412,6 @@ public class Form {
             if (nomeCognome.toLowerCase().contains(filterText) || insegnamento.toLowerCase().contains(filterText))
                 esamiMatchati.add(esame);
         }
-        esamiTable = esamiMatchati;
         fillTableModel(esamiMatchati);
     }
 

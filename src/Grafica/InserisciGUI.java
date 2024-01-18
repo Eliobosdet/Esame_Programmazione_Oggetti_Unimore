@@ -26,12 +26,14 @@ public abstract class InserisciGUI extends MediumFrame{
 
     public InserisciGUI(String titolo, GridLayout gl) {
         super(titolo,gl);
-        rdbtnLode.setEnabled(false);
         btnModifica.setEnabled(false);
+        addComponents();
     }
 
-    public InserisciGUI(Object[] obj) {
-
+    public InserisciGUI(String titolo, GridLayout gl, Object[] obj) {
+        super(titolo,gl);
+        rdbtnLode.setEnabled(false);
+        btnInserisci.setEnabled(false);
     }
 
     public void reopen() {
@@ -103,6 +105,13 @@ public abstract class InserisciGUI extends MediumFrame{
         return input.substring(0, endIndex + 1);
     }
 
+    public void setComponents(Object[] obj) {
+        setTxtNome(new JTextField(String.valueOf(obj[0])));
+        setTxtCognome(new JTextField(String.valueOf(obj[1])));
+        setTxtInsegnamento(new JTextField(String.valueOf(obj[2])));
+        setTxtNumCrediti(new JTextField(String.valueOf(obj[4])));
+        setRdbtnLode(new JRadioButton(String.valueOf(obj[5])));
+    }
 
     //GETTER E SETTER
 
@@ -141,4 +150,26 @@ public abstract class InserisciGUI extends MediumFrame{
     public void setCmpVotoFinale(JComponent cmpVotoFinale) {
         this.cmpVotoFinale = cmpVotoFinale;
     }
+
+    public void setTxtNome(JTextField txtNome) {
+        this.txtNome = txtNome;
+    }
+
+    public void setTxtCognome(JTextField txtCognome) {
+        this.txtCognome = txtCognome;
+    }
+
+    public void setTxtInsegnamento(JTextField txtInsegnamento) {
+        this.txtInsegnamento = txtInsegnamento;
+    }
+
+    public void setTxtNumCrediti(JTextField txtNumCrediti) {
+        this.txtNumCrediti = txtNumCrediti;
+    }
+
+    public void setRdbtnLode(JRadioButton rdbtnLode) {
+        this.rdbtnLode = rdbtnLode;
+    }
+
+
 }

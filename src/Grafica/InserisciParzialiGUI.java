@@ -53,6 +53,12 @@ public class InserisciParzialiGUI extends JFrame{
         actionBtnSalva(jl);
     }
 
+    public InserisciParzialiGUI(ArrayList<ProvaParziale> arrList, JLabel jl) {
+        this(jl);
+        cmbxNumParziali.setSelectedIndex(arrList.size()-2);
+
+    }
+
     public InserisciParzialiGUI(JLabel jl, ArrayList<ProvaParziale> a, int numParziali) {
         this();
         this.numParziali = numParziali;
@@ -103,7 +109,7 @@ public class InserisciParzialiGUI extends JFrame{
     private void loadJp1() {
         jp1.setLayout(new BorderLayout());
         jp1.setMaximumSize(new Dimension(800,300));
-        setCmbxNumParziali();
+        createCmbxNumParziali();
         jp1.add(cmbxNumParziali, BorderLayout.CENTER);
     }
     public void loadJp2() {
@@ -176,7 +182,7 @@ public class InserisciParzialiGUI extends JFrame{
         }
     }
 
-    private void setCmbxNumParziali() {
+    private void createCmbxNumParziali() {
         Vector<Integer> v = new Vector<>();
         for (int i = 2; i < 11; i++)
             v.add(i);
@@ -223,4 +229,5 @@ public class InserisciParzialiGUI extends JFrame{
     public void setPartials(ArrayList<ProvaParziale> partials) {
         this.partials = partials;
     }
+
 }

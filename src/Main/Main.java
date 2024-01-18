@@ -23,7 +23,7 @@ public class Main extends JFrame {
         JFrame jf = new JFrame("Gestione Esami");
 
         SalvataggioAutomatico threadSalvataggio = new SalvataggioAutomatico(form);
-        AggiornaListTabella threadAggiornaLista = new AggiornaListTabella(form);
+        //AggiornaListTabella threadAggiornaLista = new AggiornaListTabella(form);
 
         jf.setContentPane(form.getJpnl());
         jf.setSize(900,700);
@@ -33,7 +33,7 @@ public class Main extends JFrame {
         jf.setVisible(true);
 
         threadSalvataggio.start();
-        threadAggiornaLista.start();
+        //threadAggiornaLista.start();
 
         jf.addWindowListener(new WindowAdapter() {
             @Override

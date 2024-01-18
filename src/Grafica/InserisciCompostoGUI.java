@@ -40,13 +40,6 @@ public class InserisciCompostoGUI extends InserisciGUI {
         getTxtNumCrediti().setText(String.valueOf(obj[4]));
     }
 
-    /*@Override
-    public boolean ctrlTextFields() {
-        return super.ctrlTextFields() && !txtNumParziali.getText().isEmpty();
-    }*/
-
-
-
     @Override
     public void addComponents() {
         super.addComponents();

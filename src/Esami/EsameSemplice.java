@@ -13,7 +13,7 @@ public class EsameSemplice extends AbstractEsame {
 
     public EsameSemplice(Object[] obj) {
         super(String.valueOf(obj[0]),String.valueOf(obj[1]),String.valueOf(obj[2]),Integer.parseInt(String.valueOf(obj[3])),Integer.parseInt(String.valueOf(obj[4])));
-        this.lode = Boolean.valueOf(obj[5].toString());
+        this.lode = Boolean.parseBoolean(obj[5].toString());
     }
 
     public EsameSemplice(Object[] obj,InserisciSempliceGUI frame) {
