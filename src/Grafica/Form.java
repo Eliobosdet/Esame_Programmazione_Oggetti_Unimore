@@ -239,32 +239,25 @@ public class Form {
         Esame e = esamiTable.get(indice);
 
         if(e instanceof EsameSemplice es) {
-            if(e.getGui()==null)
+            if(e.getGui()==null) {
                 es.setGui(new InserisciSempliceGUI(es.getDataJtbl()));
-            else
+                actionBtnModifica(es.getGui(),indice);
+            }
+            else {
                 f = es.getGui();
+                f.reopen();
+            }
         } else {
             EsameComposto ec = (EsameComposto) e;
-            if(e.getGui()==null)
-
-            else
-                f = ec.getGui();
-        }
-
-        //int finalIndice = indice;
-        f.reopen();
-        f.getBtnModifica().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(!f.ctrlNumCrediti() || !f.ctrlTextFields()){     //Caso di errore
-                    JOptionPane.showMessageDialog(null,"Valori non inseriti e/o errati");
-                }
-                else {
-                    System.out.println("Modifica avvenuta | "+f);
-                    resetValuesEsame(f, indice);
-                }
+            if(e.getGui()==null) {
+                ec.setGui(new InserisciCompostoGUI(ec.getDataJtbl(),ec.getArrList_parziali()));
+                actionBtnModifica(ec.getGui(),indice);
             }
-        });
+            else {
+                f = ec.getGui();
+                f.reopen();
+            }
+        }
         setSaved_changes(false);
     }
     private void resetValuesEsame(InserisciGUI f, int row) {
@@ -413,6 +406,21 @@ public class Form {
                 esamiMatchati.add(esame);
         }
         fillTableModel(esamiMatchati);
+    }
+
+    private void actionBtnModifica(InserisciGUI f, int indice) {
+        f.getBtnModifica().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!f.ctrlNumCrediti() || !f.ctrlTextFields()){     //Caso di errore
+                    JOptionPane.showMessageDialog(null,"Valori non inseriti e/o errati");
+                }
+                else {
+                    System.out.println("Modifica avvenuta | "+f);
+                    resetValuesEsame(f, indice);
+                }
+            }
+        });
     }
 
     public int askToSave() {

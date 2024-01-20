@@ -27,7 +27,6 @@ public abstract class InserisciGUI extends MediumFrame{
     public InserisciGUI(String titolo, GridLayout gl) {
         super(titolo,gl);
         btnModifica.setEnabled(false);
-        addComponents();
     }
 
     public InserisciGUI(String titolo, GridLayout gl, Object[] obj) {
@@ -49,7 +48,7 @@ public abstract class InserisciGUI extends MediumFrame{
         getJp().add(lblVotoFinale);getJp().add(cmpVotoFinale);
         getJp().add(lblNumCrediti);getJp().add(txtNumCrediti);
         getJp().add(lblLode);getJp().add(rdbtnLode);
-        getJp().add(getBtnInserisci()); getJp().add(getBtnModifica());
+        getJp().add(btnInserisci); getJp().add(btnModifica);
     }
 
     public boolean ctrlTextFields() {

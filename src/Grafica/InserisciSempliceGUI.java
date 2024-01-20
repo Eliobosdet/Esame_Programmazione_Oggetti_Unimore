@@ -20,6 +20,7 @@ public class InserisciSempliceGUI extends InserisciGUI {
         super("Esame Semplice", new GridLayout(8,2), obj);
         setCmbxVotoFinale();
         this.setComponents(obj);
+        super.addComponents();
         actionCmbxVotoFinale();
     }
 
@@ -58,7 +59,7 @@ public class InserisciSempliceGUI extends InserisciGUI {
     @Override
     public void setComponents(Object[] obj) {
         super.setComponents(obj);
-        cmbxVotoFinale.setSelectedIndex(Integer.parseInt(String.valueOf(obj[4]))-18);
+        cmbxVotoFinale.setSelectedIndex(Integer.parseInt(String.valueOf(obj[3]))-18);
     }
 
     private void actionCmbxVotoFinale() {

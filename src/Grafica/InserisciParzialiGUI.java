@@ -53,10 +53,12 @@ public class InserisciParzialiGUI extends JFrame{
         actionBtnSalva(jl);
     }
 
-    public InserisciParzialiGUI(ArrayList<ProvaParziale> arrList, JLabel jl) {
+    public InserisciParzialiGUI(JLabel jl, ArrayList<ProvaParziale> arrList) {
         this(jl);
         cmbxNumParziali.setSelectedIndex(arrList.size()-2);
-
+        partials = arrList;
+        numParziali = arrList.size();
+        setDataByFile();
     }
 
     public InserisciParzialiGUI(JLabel jl, ArrayList<ProvaParziale> a, int numParziali) {
@@ -130,7 +132,6 @@ public class InserisciParzialiGUI extends JFrame{
         jp4.add(btnSalva,BorderLayout.CENTER);
         jp4.setMaximumSize(new Dimension(800,300));
     }
-
     public int calcVoto() {
         int med = 0;
         for (ProvaParziale p:
@@ -163,7 +164,6 @@ public class InserisciParzialiGUI extends JFrame{
         }
         return sum == 100;
     }
-
     private void createComponents() {
         int counter = 1;
         components.clear();
@@ -181,14 +181,12 @@ public class InserisciParzialiGUI extends JFrame{
             jp3.add(jc);
         }
     }
-
     private void createCmbxNumParziali() {
         Vector<Integer> v = new Vector<>();
         for (int i = 2; i < 11; i++)
             v.add(i);
         cmbxNumParziali= new JComboBox(v);
     }
-
     private Vector<Integer> getVectorVoti() {
         Vector<Integer> v = new Vector<>();
         for (int i = 18; i < 31; i++)
@@ -201,6 +199,18 @@ public class InserisciParzialiGUI extends JFrame{
             v.add(i);
         return v;
     }
+    private void setDataByFile() {
+        int j = 0;
+        JComboBox jc;
+        for(int i = 1; i < numParziali*3; i+=2, j++) {
+            jc = (JComboBox) components.get(i);
+            jc.setSelectedIndex(partials.get(j).getVotoFinale()-18);
+            i++;
+            jc = (JComboBox) components.get(i);
+            jc.setSelectedIndex(partials.get(j).getPesoPercentuale());
+        }
+    }
+
 
     public JComboBox<Integer> getCmbxNumParziali() {
         return cmbxNumParziali;
