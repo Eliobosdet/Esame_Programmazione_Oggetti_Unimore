@@ -3,6 +3,12 @@ package Esami;
 import Grafica.InserisciGUI;
 import Grafica.InserisciSempliceGUI;
 
+/**
+ * Classe che memorizza ed implementa attributi e metodi di un esame di tipo semplice
+ * Nello specifico: un esame svolto da uno studente, composto da una sola prova
+ * Essa si basa sull'interfaccia Esame
+ */
+
 public class EsameSemplice extends AbstractEsame {
     private boolean lode;
 

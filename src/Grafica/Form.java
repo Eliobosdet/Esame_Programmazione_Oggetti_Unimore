@@ -27,7 +27,7 @@ public class Form {
     private JButton btnSalva;
     private JButton btnCarica;
     private JTextField txtFiltra;
-    private JButton btnFiltra;
+    private JButton btnGrafico;
 
     //COMPONENTI LOGICI
     DefaultTableModel tblmdl = new DefaultTableModel() {
@@ -199,7 +199,7 @@ public class Form {
             @Override
             public void changedUpdate(DocumentEvent e) {}
         });
-        btnFiltra.addActionListener(new ActionListener() {
+        btnGrafico.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 generaGrafico();
