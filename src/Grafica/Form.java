@@ -209,10 +209,7 @@ public class Form {
 
     private void generaGrafico() {
         System.out.println("Esami tabella: "+esamiTable);
-        if(graficoBarre == null)
-            graficoBarre = new GraficoBarre(esamiTable);
-        else
-            graficoBarre.getjFrame().setVisible(true);
+        graficoBarre = new GraficoBarre(esamiTable);
     }
 
     private void addEsameSemplice(InserisciSempliceGUI frame) {
