@@ -15,11 +15,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * Classe per la creazione di un grafico a barre utilizzando JFreeChart.
+ */
 public class GraficoBarre {
 
     private JFreeChart chart;
     JFrame jFrame;
 
+    /**
+     * Costruttore della classe GraficoBarre.
+     *
+     * @param esami Lista di esami da rappresentare nel grafico.
+     */
     public GraficoBarre(ArrayList<Esame> esami) {
         // Creare il dataset
         CategoryDataset dataset = createDataset(esami);
@@ -32,12 +40,17 @@ public class GraficoBarre {
         chartPanel.setPreferredSize(new Dimension(600, 400));
 
         // Creare il frame e aggiungere il pannello del grafico
-        if(jFrame == null)
+        if (jFrame == null)
             setFrame(chartPanel);
         else
             jFrame.getContentPane().add(chartPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Imposta il frame con il pannello del grafico.
+     *
+     * @param chartPanel Pannello del grafico.
+     */
     private void setFrame(ChartPanel chartPanel) {
         jFrame = new JFrame("Grafico a Barre");
         jFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -47,12 +60,21 @@ public class GraficoBarre {
         jFrame.setVisible(true);
     }
 
-    // Metodo per ottenere il CategoryChart creato
+    /**
+     * Restituisce il JFreeChart creato.
+     *
+     * @return JFreeChart del grafico.
+     */
     public JFreeChart getChart() {
         return chart;
     }
 
-    // Metodo per creare il CategoryDataset a partire dagli esami
+    /**
+     * Crea il CategoryDataset a partire dalla lista di esami.
+     *
+     * @param esami Lista di esami.
+     * @return CategoryDataset.
+     */
     private CategoryDataset createDataset(ArrayList<Esame> esami) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -67,7 +89,12 @@ public class GraficoBarre {
         return dataset;
     }
 
-    // Metodo per creare il CategoryChart
+    /**
+     * Crea il CategoryChart.
+     *
+     * @param dataset CategoryDataset.
+     * @return JFreeChart del grafico.
+     */
     private JFreeChart createChart(CategoryDataset dataset) {
         JFreeChart barChart = ChartFactory.createBarChart(
                 "Grafico Voti Esami", // Titolo del grafico
@@ -85,6 +112,11 @@ public class GraficoBarre {
         return barChart;
     }
 
+    /**
+     * Restituisce il frame del grafico.
+     *
+     * @return Frame del grafico.
+     */
     public JFrame getjFrame() {
         return jFrame;
     }
